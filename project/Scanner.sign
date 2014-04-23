@@ -1,0 +1,9 @@
+SIGNATURE Scanner
+
+IMPORT Denotation   ONLY denotation
+       String        ONLY string
+       Token        ONLY token
+       Seq[token] ONLY seq[token]
+
+
+FUN scan : string -> seq[token]

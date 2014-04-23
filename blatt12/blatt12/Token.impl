@@ -1,0 +1,21 @@
+IMPLEMENTATION Token
+
+IMPORT Denotation COMPLETELY
+
+
+DATA token == or and not impl equiv true false open close
+              error
+
+
+-- Pretty printer for tokens.
+FUN ` : token -> denotation
+DEF `(impl)     == "impl"
+DEF `(equiv)    == "equiv"
+DEF `(or)       == "or"
+DEF `(and)      == "and"
+DEF `(not)      == "not"
+DEF `(true)     == "T"
+DEF `(false)    == "F"
+DEF `(open)     == "("
+DEF `(close)    == ")"
+DEF `(error)    == "Unknown input"

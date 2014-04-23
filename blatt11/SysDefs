@@ -1,0 +1,4 @@
+TOPSTRUCT  = LayoutDemo
+TOPCOM     = layoutDemo
+
+OPAL_LIBS += $(OPAL_WIN)

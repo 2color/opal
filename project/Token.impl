@@ -1,0 +1,13 @@
+IMPLEMENTATION Token
+
+IMPORT Denotation COMPLETELY
+
+
+DATA token == openHtml closeHtml
+              openTitle closeTitle 
+              openBody closeBody 
+              pLeft pRight pCenter pJustify 
+              closeP
+              word( content: string)
+              error
+

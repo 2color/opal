@@ -1,0 +1,50 @@
+IMPLEMENTATION ParserTest
+
+IMPORT  Parser      COMPLETELY
+        Nat         COMPLETELY
+        NatConv     COMPLETELY
+        Denotation  COMPLETELY
+
+
+
+DEF test == 
+    "------------------------------------------------------\n" ++
+    "Parser Test Module \n" ++
+    runTest(1,"(F and F)","false") ++
+    runTest(2,"(F and T)","false") ++
+    runTest(3,"(T and F)","false") ++
+    runTest(4,"(T and T)","true") ++
+    runTest(5,"not(T and T)","false") ++
+    runTest(6,"(F or F)","false") ++
+    runTest(7,"(F or T)","true") ++
+    runTest(8,"(T or F)","true") ++
+    runTest(9,"(T or T)","true") ++
+    runTest(10,"not(T or T)","false") ++
+    runTest(11,"(T impl T)","true") ++
+    runTest(12,"(F impl T)","true") ++
+    runTest(13,"(T impl F)","false") ++
+    runTest(14,"(f impl T)","Parsing failed.") ++
+    runTest(15,"((T impl F) or (T equiv T))","true") ++
+    runTest(16,"((T impl F) and (T equiv T))","false") ++
+    runTest(17,"((T or F) and (T equiv T))","true") ++
+    runTest(18,"((F or F) equiv (T impl F))","true") ++
+    "\n------------------ END OF TESTS ----------------------\n"
+
+
+
+FUN runTest : nat ** denotation ** denotation -> denotation
+DEF runTest(testNumber, expr, expected) ==
+    IF( result = expected ) THEN 
+        message ++ success
+    ELSE
+        message ++ fail
+    FI
+    WHERE 
+        result == eval(expr)
+        message == 
+            "------------------------------------------------------\n" ++
+            "Test " ++ `(testNumber) ++ ": " ++ expr ++ " | " ++
+            "expected: " ++ expected ++ " | result: " ++ result ++ "\n"
+        success == "Test passed! \n"
+        fail    == "Test FAILED! FAILED! FAILED! \n"
+

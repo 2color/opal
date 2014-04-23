@@ -1,0 +1,25 @@
+IMPLEMENTATION Syntax
+
+IMPORT String COMPLETELY
+       Seq COMPLETELY
+       SeqReduce COMPLETELY
+       StringConv COMPLETELY
+       Char COMPLETELY
+
+
+DATA html       ==  html(title : title, body : body)
+                    fail
+
+DATA title      ==  title(content : seq[string])
+                    fail
+
+DATA body       ==  body(content : seq[par])
+                    fail
+
+DATA par        ==  par(align : alignment, content : seq[string])
+                    fail
+
+DATA alignment  == left right center justify
+
+
+DEF getTitle(html) == `(reduce(\\a,b. a ++ %(blank) ++ b ,%(blank))(content(title(html))))

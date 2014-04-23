@@ -1,0 +1,7 @@
+SIGNATURE Parser
+
+IMPORT Token ONLY token
+       Syntax COMPLETELY
+
+-- Parses a given sequence of tokens.
+FUN parse : seq[token] -> html

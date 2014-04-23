@@ -1,0 +1,133 @@
+IMPLEMENTATION Viewer
+
+IMPORT Settings COMPLETELY
+       Layout COMPLETELY
+       Parser COMPLETELY
+       Syntax COMPLETELY
+       Scanner COMPLETELY
+       Draw COMPLETELY
+
+IMPORT Com COMPLETELY
+       ProcessArgs COMPLETELY
+       BasicIO COMPLETELY
+       String COMPLETELY
+       StringConv ONLY `
+       File COMPLETELY
+       Compose COMPLETELY
+       ComCompose COMPLETELY
+       Denotation COMPLETELY
+       Nat COMPLETELY
+       Real COMPLETELY
+       Seq COMPLETELY
+       Void COMPLETELY
+
+IMPORT WinButton COMPLETELY
+       WinCanvas COMPLETELY
+       WinCanvasEditor COMPLETELY
+       WinConfig COMPLETELY
+       WinEmitter COMPLETELY
+       WinFontMetrics COMPLETELY
+       WinWindow COMPLETELY
+       WinView COMPLETELY
+
+-- ---------------------------------------------------------------------
+-- Type definitions
+-- ---------------------------------------------------------------------
+
+DATA gui == gui(edit : canvasEditor,
+                emit : emitter[action],
+                html : html,
+                metr : metrics)
+
+DATA action == exit
+
+
+-- ---------------------------------------------------------------------
+-- Entry Function
+-- ---------------------------------------------------------------------
+DEF viewer == 
+              argCount          & (\\n.
+              IF n < 2 THEN writeLine("pass a HTML file. ") & exit(0)
+              ELSE 
+                arg(1)                & (\\fileName.
+                readFile(fileName)    & (\\rawHtml.
+                setupGui(processHtml(rawHtml))  & (\\G.
+                setupWindow(G)        & (\\win.
+                display(edit(G), draw(layout(metr(G), body(html(G)))))  &
+                waitForTermination(G, win)))
+                ))
+              FI
+              )
+
+
+
+
+-- ---------------------------------------------------------------------
+-- Scan and Parse the html
+-- ---------------------------------------------------------------------
+FUN processHtml : string -> html
+DEF processHtml(string) == (parse o scan)(string)
+
+
+-- ---------------------------------------------------------------------
+-- Read the file and return the full content
+-- ---------------------------------------------------------------------
+FUN readFile : denotation -> com[string]
+DEF readFile(fileName) == 
+  open(fileName, "r")   & (\\file.
+  read(file, max'Nat)   & (\\string.
+  succeed(string)
+  ))
+
+
+-- ---------------------------------------------------------------------
+-- Setup of window
+-- ---------------------------------------------------------------------
+FUN setupGui : html -> com[gui]
+DEF setupGui(html) == 
+    canvasEditor            & (\\edit. -- com[canvasEditor]
+    emitter                 & (\\emit. -- com[emitter]
+    fontMetrics(stdFont)    & (\\metr.
+    succeed(gui(edit, emit, html, metr)))))
+
+
+
+FUN setupWindow : gui -> com[window]
+DEF setupWindow(G) == 
+                        window(frame(G))                         & (\\win.
+                        set(win, titleName(getTitle(html(G))))   & (\\ _ .
+                        grab(win)                                & (\\ _ .
+                        succeed(win))))
+
+
+-- ---------------------------------------------------------------------
+-- The layout (views)
+-- ---------------------------------------------------------------------
+FUN frame : gui -> view
+DEF frame(G) == pad(edit(G))
+                ^^
+                exitButton(emit(G))
+
+
+FUN pad : canvasEditor -> view
+DEF pad(editor) == canvas with (size(canvasSize)
+                   ++ edit(editor)
+                   ++ background(canvasBackground))
+
+FUN exitButton : emitter[action] -> view
+DEF exitButton(emit) == 
+                        button with (bind(emit, exit)
+                        ++ text(exitButton))
+
+
+
+-- ---------------------------------------------------------------------
+-- Event Binding
+-- ---------------------------------------------------------------------
+FUN waitForTermination : gui ** window -> com[void]
+DEF waitForTermination(G, win) ==
+       await(emit(G)) & (\\act.
+       IF act exit? THEN release(win) & delete(win) & exit(0) FI)
+
+
+

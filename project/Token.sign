@@ -1,0 +1,12 @@
+SIGNATURE Token
+
+IMPORT Denotation ONLY denotation
+IMPORT String ONLY string
+
+TYPE token == openHtml closeHtml
+              openTitle closeTitle 
+              openBody closeBody 
+              pLeft pRight pCenter pJustify 
+              closeP
+              word( content: string)
+              error

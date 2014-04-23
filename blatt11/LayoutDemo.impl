@@ -1,0 +1,189 @@
+IMPLEMENTATION LayoutDemo
+
+IMPORT BasicIO    COMPLETELY
+       Com        COMPLETELY  
+       ComCompose COMPLETELY
+       Denotation COMPLETELY
+       Nat        COMPLETELY
+       NatConv    COMPLETELY
+       Real       COMPLETELY
+       Seq        COMPLETELY
+       Seq[real]  COMPLETELY
+       SeqMap     COMPLETELY
+       SeqFilter  COMPLETELY
+       SeqReduce  COMPLETELY
+       SeqZip     COMPLETELY
+       Void       COMPLETELY
+
+IMPORT ProcessArgs     COMPLETELY
+       WinButton       COMPLETELY
+       WinCanvas       COMPLETELY
+       WinCanvasEditor COMPLETELY
+       WinConfig       COMPLETELY
+       WinEmitter      COMPLETELY
+       WinWindow       COMPLETELY
+       WinView         COMPLETELY
+
+
+DATA align == left
+              center
+              right
+
+
+DATA boxes == boxes(aligns: seq[align], widths: seq[real])
+
+
+DATA info == info( guiInfo : gui, argInfo : boxes )
+
+
+-- Elements which will be used througout the application are stored in a
+-- separate data structure.
+DATA gui == gui(edit  : canvasEditor,
+                emit  : emitter[action],
+                title : denotation)
+
+-- Events
+DATA action == exit
+
+
+-- ---------------------------------------------------------------------
+-- Main function
+-- ---------------------------------------------------------------------
+
+--center 1 10 30 60 120 230
+DEF layoutDemo == 
+                  initialize     & (\\i.
+                  setupWindow(i) & (\\win.
+                  drawLayout(i)  &
+                  handleEmits(i, win)))
+
+-- ---------------------------------------------------------------------
+-- Setup of window
+-- ---------------------------------------------------------------------
+
+FUN initialize : com[info]
+DEF initialize == 
+                  processArgs           & (\\boxes.
+                  canvasEditor          & (\\edit.
+                  emitter               & (\\emit.
+                  succeed(info(gui(edit, emit, "LayoutDemo"), boxes)))))
+
+FUN setupWindow : info -> com[window]
+DEF setupWindow(info(g,_)) == window(frame(g))       & (\\ win.  -- create window based on the root view 'frame'
+                      set(win, titleName(title(g)))  & (
+                      grab(win)                      &
+                      succeed(win)))
+
+
+
+-- ---------------------------------------------------------------------
+-- Command Line processing
+-- ---------------------------------------------------------------------
+
+
+FUN usage : denotation -> com[void]
+DEF usage(cmd) == writeLine("Usage: " ++ cmd ++ " [left|center|right] [width] ... ")
+
+FUN getAlign : denotation -> align
+DEF getAlign(deno) == IF deno = "center" THEN center
+                      IF deno = "left"   THEN left
+                      IF deno = "right"  THEN right
+                      FI
+
+FUN isDenAlign : denotation -> bool
+DEF isDenAlign(den) == 
+  IF den = "center" or den = "left" or den = "right" THEN true
+  ELSE false
+  FI
+
+FUN procArgSeq : seq[denotation] -> boxes
+DEF procArgSeq(args) == 
+    boxes(aligns, widthsPx)
+    WHERE
+    --layoutdemo center 1 center 10 center 30 center 60 center 120 center 230
+    aligns    == map(getAlign)(filter(isDenAlign)(args))
+    widths    == filter(\\arg. isDenAlign(arg) = false)(args)
+    widthsPx  == map(px)(widths)
+
+FUN processArgs : com[boxes]
+DEF processArgs == args & (\\ argList .
+                   IF #(argList) < 3 THEN usage(ft(argList)) & exit(1)
+                   ELSE succeed(procArgSeq(rt(argList)))
+                   FI)
+
+
+
+-- ---------------------------------------------------------------------
+-- Main program
+-- ---------------------------------------------------------------------
+
+FUN drawLayout : info -> com[void]
+DEF drawLayout(i) == display( edit(guiInfo(i)), picture(argInfo(i)) )
+
+FUN leftX : align ** real -> real
+DEF leftX(left, _) == left
+DEF leftX(center, width) == (canvasWidth - width) / 2
+DEF leftX(right, width) == right - width
+
+FUN picture : boxes -> drawing
+DEF picture(boxes(aligns, widths)) ==
+  LET
+    rectHeight == (bottom - margin) / asReal((2 * #(widths)) -1)
+    upperXs    == zip(leftX)(aligns, widths)
+    upperYs    == (0 .. (#(widths)-1))(\\ c. top + 2*asReal(c) * rectHeight)
+    upperLefts == zip(@)(upperXs, upperYs)
+    lowerXs    == zip(+)(upperXs, widths)
+    --lowerYs    == map(\\ y. y + rectHeight)(upperYs) SAME AS THE LINE BELOW
+    lowerYs    == map(_ + rectHeight)(upperYs)
+    lowerRights == zip(@)(lowerXs, lowerYs)
+    rects      == zip(\\ l,r. rectangle(l,r) with fill(black))(upperLefts,lowerRights)
+  IN
+    reduce(++, {})(rects)
+
+
+
+FUN handleEmits : info ** window -> com[void]
+DEF handleEmits(i, win) ==
+    await(emit(guiInfo(i))) & (\\ act .
+    IF act exit? THEN release(win) &
+                      delete(win) &
+                      exit(0)
+    FI)
+
+
+-- ---------------------------------------------------------------------
+-- The layout (views)
+-- ---------------------------------------------------------------------
+
+FUN frame : gui -> view  -- The 'root' view. Composition of other views.
+DEF frame(g) == pad(edit(g))
+                ^^                -- ^^ means 'over
+                exitButton(emit(g))
+
+
+FUN pad : canvasEditor -> view              -- gets canvasEditor, returns a fine canvas
+DEF pad(editor) == canvas with (size(canvasSize)
+                                ++ edit(editor)
+                                ++ background(white))
+
+
+FUN exitButton : emitter[action] -> view
+DEF exitButton(emit) == button with (bind(emit, exit) ++ text("Exit"))
+
+-- ---------------------------------------------------------------------
+-- Basic settings
+-- ---------------------------------------------------------------------
+
+FUN canvasWidth canvasHeight : real
+DEF canvasWidth == "600" px
+DEF canvasHeight == "400" px
+
+FUN canvasSize : size
+DEF canvasSize == canvasWidth x canvasHeight
+
+FUN margin top bottom left right : real
+DEF margin == "10" px
+DEF top == margin
+DEF bottom == canvasHeight - margin
+DEF left == margin
+DEF right == canvasWidth - margin

@@ -1,0 +1,168 @@
+IMPLEMENTATION Layout
+
+IMPORT WinConfig ONLY point @
+       String COMPLETELY
+       StringConv COMPLETELY
+       WinFontMetrics COMPLETELY
+       Real COMPLETELY
+       Nat  COMPLETELY
+       NatConv  ONLY asReal
+       Pair COMPLETELY
+       Denotation COMPLETELY
+       Settings COMPLETELY
+       Syntax COMPLETELY
+       Compose COMPLETELY
+
+IMPORT Seq COMPLETELY
+       SeqMap COMPLETELY
+       SeqMapEnv COMPLETELY
+       SeqOfSeq COMPLETELY
+       SeqReduce COMPLETELY
+       SeqZip COMPLETELY
+
+DATA posWord == posWord(text : string, pos : point, width : real)
+DATA word == word(text : string, width : real)
+
+-- ---------------------------------------------------------------  
+-- the "public" layout function which calculates the layout for 
+-- the body(containing a list of paragraphs) by means of the metrics
+-- ---------------------------------------------------------------  
+DEF layout(metr, body(pars)) == layoutPars(metr, margin, pars)
+DEF layout(metr, fail) == <>
+
+
+-- ---------------------------------------------------------------  
+-- Calculate Layout for all paragraphs
+-- ---------------------------------------------------------------
+FUN layoutPars : metrics ** real ** seq[par] -> seq[posWord]
+DEF layoutPars(_, _, <>) == <>
+DEF layoutPars(metr, yPos, par(align, words) :: rt) == 
+    layoutPar(align, lineHeight, yPos, 1, lines ) ++ layoutPars(metr, nextParY, rt)
+    WHERE
+        widths == getWidth(metr) * (words)
+        lineHeight == height(metr) + lineSpacing
+        lines  == break(wordWidths)
+        parHeight ==  (asReal(lineCount) * lineHeight) + yPos
+        nextParY == parHeight + parSpacing
+        lineCount == #(lines)
+        wordWidths == zip(word)(words,widths)
+
+
+-- ------------------------------------------------------------------- 
+-- Calculate Layout for a single paragraph by iterating over the lines
+-- -------------------------------------------------------------------
+FUN layoutPar : alignment ** real ** real ** real ** seq[seq[word]] -> seq[posWord]
+DEF layoutPar(_, _, _, _, <>) == <>
+DEF layoutPar(align, lineHeight, yPos , lineNum,  line :: rt) ==
+    IF ( justify?(align) and empty?(rt) ) THEN
+      layoutLine(left, margin, lineYPosition, line)
+    ELSE  
+      layoutLine(align, margin, lineYPosition, line) ++ 
+          layoutPar(align, lineHeight, yPos, lineNum + 1 , rt)
+    FI
+    WHERE
+        lineYPosition == yPos + (lineHeight + lineSpacing) * lineNum
+
+
+-- ---------------------------------------------------------------          
+-- Calculate Layout for a single line by iterating over the words
+-- ---------------------------------------------------------------  
+FUN layoutLine : alignment ** real ** real ** seq[word] -> seq[posWord]
+DEF layoutLine(_, _, _, <>) == <>
+
+
+
+-- ---------------------------------------------------------------  
+-- Left Align 
+-- ---------------------------------------------------------------  
+DEF layoutLine(left, x, y, word(wordText, wordWidth) :: rt ) == 
+    posWord(wordText, @( x, y), wordWidth)  ::  layoutLine(left, nextX, y, rt)
+    WHERE
+        nextX == x + wordWidth + glue
+
+-- ---------------------------------------------------------------  
+-- Right Align
+-- ---------------------------------------------------------------  
+DEF layoutLine(right, x, y, word :: rt ) == 
+    posWord(wordText, @( xPos, y), wordWidth) :: layoutLine(left, nextX, y, rt)
+    WHERE
+        wordText == text(word)
+        wordWidth == width(word)
+        nextX == xPos + wordWidth + glue
+        widths == map(\\w. width(w) + glue )(word :: rt)
+        xPos == canvasWidth - margin + glue - reduce(+, 0)(widths)
+
+
+-- ---------------------------------------------------------------  
+-- Justify Align
+-- ---------------------------------------------------------------  
+DEF layoutLine(justify, x, y, word :: rt ) == 
+    posWord(wordText, @( x, y), wordWidth) :: layoutJustify(x + wordWidth, y, space, rt)
+    WHERE
+        wordText == text(word)
+        wordWidth == width(word)
+        widths == map(\\w. width(w))(word :: rt)
+        sumWidths == reduce(+,0)(widths)
+        space == ( usableWidth - sumWidths ) / (asReal(#(word :: rt)) - 1)
+
+FUN layoutJustify : real ** real ** real ** seq[word] -> seq[posWord]
+DEF layoutJustify(x, y, space, word :: rt ) == 
+    posWord(wordText, @( x + space, y), wordWidth) :: layoutJustify(x + wordWidth + space, y, space, rt)
+    WHERE
+        wordText == text(word)
+        wordWidth == width(word)
+
+DEF layoutJustify(_,_,_, <> ) == <>
+
+
+-- ---------------------------------------------------------------  
+-- Center Align
+-- ---------------------------------------------------------------  
+DEF layoutLine(center, x, y, word :: rt ) == 
+    posWord(wordText, @( firstX, y), wordWidth) ::  layoutLine(left, nextX, y, rt)
+    WHERE
+        wordText == text(word)
+        wordWidth == width(word)
+        widths == map(\\w. width(w))(word :: rt)
+        sumWidths == reduce(+,0)(widths)
+        completeWidth == sumWidths + (asReal(#(word::rt)) - 1 ) * glue
+        firstX == ((usableWidth - completeWidth)/2) + margin
+        nextX == firstX + wordWidth + glue
+
+-- ---------------------------------------------------------------  
+-- break the words into sequences of lines by fitting as many words
+-- as possible into a line
+-- ---------------------------------------------------------------  
+FUN break : seq[word] -> seq[seq[word]]
+DEF break(<>) == <>
+DEF break(word :: rt) == 
+    LET 
+        wordWidth       == width(word)
+        k               == 1 + fit(usableWidth - wordWidth)(rt)
+        (line, trailer) == split(k, word :: rt)
+    IN
+        line :: break(trailer)
+
+
+-- ---------------------------------------------------------------  
+-- Calculate the number of words fitting in a line
+-- ---------------------------------------------------------------  
+FUN fit : real -> seq[word] -> nat
+DEF fit(supply)(<>) == 0
+DEF fit(supply)(word :: rt) == 
+    LET 
+        needed == glue + width(word)
+    IN
+        IF      needed <= supply THEN 1 + fit(supply - needed)(rt)
+        ELSE    0
+        FI
+
+-- ---------------------------------------------------------------  
+-- Get the width of a string based on the metrics of the window
+-- ---------------------------------------------------------------
+FUN getWidth : metrics -> string -> real
+DEF getWidth(metr)(str) == w
+  WHERE
+    (w,h) == dimensions(metr)(`(str)) 
+    
+

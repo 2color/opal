@@ -1,0 +1,4 @@
+# SysDefs
+TOPSTRUCT=Viewer
+TOPCOM=viewer
+OPAL_LIBS += $(OPAL_WIN)

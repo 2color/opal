@@ -1,0 +1,70 @@
+IMPLEMENTATION Scanner
+
+IMPORT Seq          COMPLETELY
+       SeqMap       COMPLETELY
+       String       COMPLETELY
+       StringFilter COMPLETELY
+       Char         COMPLETELY
+       Nat          COMPLETELY
+       Bool         COMPLETELY
+       Compose      ONLY o
+       Token        COMPLETELY
+       Map          COMPLETELY
+
+/*
+Grammar:
+S        -> BoolLit
+         |  not S
+         |  (
+         \\\\\\\\
+          S Op S )
+BoolLit  -> T | F
+Op       -> or | and
+*/
+
+
+-- Scanning = Partitioning + Translating
+FUN scan : denotation -> seq[token]
+DEF scan(d) == (translate o partition)(asString(d))
+
+
+-- Partition input into its lexemes.
+FUN partition : string -> seq[string]
+DEF partition(<>)    == <>
+DEF partition(x::xs) ==
+  IF whitespace?(x) THEN partition(xs)
+  IF parens?(x) THEN %(x) :: partition(xs) -- % : char init
+  --StringFilter split before the first one that doesnt pass te predicate
+  ELSE LET (ide,rest) == split(not o separator?, x::xs) 
+       IN ide :: partition(rest)
+  FI
+
+-- Discriminator for seperating lexemes.
+FUN separator? : char -> bool
+DEF separator?(c) == whitespace?(c) or parens?(c)
+
+-- Discriminator for parenthesis.
+FUN parens? : char -> bool
+DEF parens?(c) == c = ("("!) or c = (")"!)
+
+
+-- Function mapping lexemes to their tokens 
+FUN translate : seq[string] -> seq[token]
+DEF translate(strings) == trans * strings --
+
+FUN trans : string -> token
+DEF trans(str) == IF def?(str, table) THEN table!str
+                  ELSE error FI
+
+FUN table : map[string,<,token]
+DEF table == 
+    ("impl"!,   impl)  def
+    ("equiv"!,  equiv) def
+    ("or"!,     or)    def
+    ("and"!,    and)   def
+    ("T"!,      true)  def
+    ("F"!,      false) def
+    ("not"!,    not)   def
+    ("("!,      open)  def
+    (")"!,      close) def
+    {}

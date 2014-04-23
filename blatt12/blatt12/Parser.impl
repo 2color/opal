@@ -1,0 +1,120 @@
+IMPLEMENTATION Parser
+
+IMPORT Token      COMPLETELY
+       Scanner    COMPLETELY
+       Seq[token] COMPLETELY
+       BoolConv   COMPLETELY
+       Denotation COMPLETELY
+       Compose    COMPLETELY
+       Bool       COMPLETELY
+
+
+-- Abstract syntax tree.
+DATA expr == boolLit(value: boolLit)
+             not(arg: expr)
+             binOp(op: binOp, left: expr, right: expr)
+             fail
+
+DATA binOp == and or impl equiv fail
+
+DATA boolLit == true false fail
+
+
+-- Lift error? to sequences.
+FUN error? : seq[token] -> bool
+DEF error?(error :: _) == true
+DEF error?(_)          == false
+
+
+-- Parses a given sequence of tokens.
+FUN parse : seq[token] -> expr
+DEF parse(input) == 
+    LET
+        (e, rt) == parseExpr(input)
+    IN
+        IF ::?(rt) or fail?(e) or error?(rt) THEN fail
+        ELSE e
+        FI
+
+
+-- The parsing function yields an abstract syntax tree and remaining
+-- input. If the second result is non-empty, the abstract syntax tree
+-- must be 'fail'.
+FUN parseExpr : seq[token] -> expr ** seq[token]
+
+-- <(,T,and,(,F,or,T,),)>
+
+-- parse boolLiterals
+DEF parseExpr(true :: rt)  == (boolLit(true), rt)
+DEF parseExpr(false :: rt) == (boolLit(false), rt)
+
+-- parse a not ... expression
+DEF parseExpr(not :: rest) ==
+		LET 
+			(arg, r1) == parseExpr(rest)
+		IN 
+			(not(arg), r1)
+
+-- parse expression in brackets
+DEF parseExpr(open :: r0) ==
+		LET
+			(e1, r1) == parseExpr(r0)
+			(op, r2) == parseBinOp(r1)
+			(e2, r3) == parseExpr(r2)
+			r4       == parseClose(r3)
+		IN
+			IF error?(r4) THEN (fail, r4)
+			ELSE (binOp(op, e1, e2), r4)
+			FI
+
+-- something unexpected happens => failure
+DEF parseExpr(input) == (fail, error :: input)
+
+-- parse a closing bracket or fail
+FUN parseClose : seq[token] -> seq[token]
+DEF parseClose(close :: rt) == rt
+DEF parseClose(input)       == error :: input
+
+-- parse a binary operation
+FUN parseBinOp : seq[token] -> binOp ** seq[token]
+DEF parseBinOp(and :: rt)   == (and, rt)
+DEF parseBinOp(or :: rt)    == (or, rt)
+DEF parseBinOp(impl :: rt)  == (impl, rt)
+DEF parseBinOp(equiv :: rt) == (equiv, rt)
+DEF parseBinOp(input)       == (fail, error :: input)
+
+
+-- Evaluate a given logic formula.
+DEF eval(input) == 
+	LET
+		st == (parse o scan)(input)
+	IN
+		IF fail?(st) THEN "Parsing failed."
+		ELSE `(evalExpr(st))
+		FI
+
+
+FUN evalExpr : expr -> bool
+DEF evalExpr(boolLit(true))    == true
+DEF evalExpr(boolLit(false))   == false
+DEF evalExpr(not(e))           == ~(evalExpr(e))
+DEF evalExpr(binOp(and, l, r)) == evalExpr(l) and evalExpr(r)
+DEF evalExpr(binOp(or, l, r))  == evalExpr(l) or evalExpr(r)
+DEF evalExpr(binOp(impl, l, r))  == evalExpr(l) implies evalExpr(r)
+DEF evalExpr(binOp(equiv, l, r))  == evalExpr(l) equiv evalExpr(r)
+-- DEF evalExpr(fail) should never happen
+
+
+
+-- print expr tree as denotation
+FUN ` : expr -> denotation
+DEF `(boolLit(true))     == "T"
+DEF `(boolLit(false))    == "F"
+DEF `(boolLit(fail))     == "-Unknown boolLiteral-"
+DEF `(not(e))            == "not " ++ `(e)
+DEF `(binOp(and, l, r))  == "(" ++ `(l) ++ " and " ++ `(r) ++ ")"
+DEF `(binOp(or, l, r))   == "(" ++ `(l) ++ " or " ++ `(r) ++ ")"
+DEF `(binOp(impl, l, r))   == "(" ++ `(l) ++ " -> " ++ `(r) ++ ")"
+DEF `(binOp(equiv, l, r))   == "(" ++ `(l) ++ " <-> " ++ `(r) ++ ")"
+DEF `(binOp(fail, _, _)) == "-Unknown operation-"
+DEF `(fail)              == "-Unkown expression-"

@@ -1,0 +1,7 @@
+SIGNATURE Draw
+
+IMPORT Layout COMPLETELY
+       Seq[posWord] COMPLETELY
+       WinCanvasEditor COMPLETELY
+
+FUN draw : seq[posWord] -> drawing

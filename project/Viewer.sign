@@ -1,0 +1,6 @@
+SIGNATURE Viewer
+
+IMPORT Com ONLY com
+       Void ONLY void
+
+FUN viewer : com[void]

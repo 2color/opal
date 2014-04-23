@@ -1,0 +1,4 @@
+# SysDefs
+TOPSTRUCT=Fraktal
+TOPCOM=fraktal
+OPAL_LIBS += $(OPAL_WIN)

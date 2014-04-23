@@ -1,0 +1,4 @@
+# SysDefs
+TOPSTRUCT=TextDemo
+TOPCOM=textdemo
+OPAL_LIBS += $(OPAL_WIN)

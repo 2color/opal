@@ -1,0 +1,6 @@
+SIGNATURE TextDemo
+
+IMPORT Com ONLY com
+       Void ONLY void
+
+FUN textdemo : com[void]

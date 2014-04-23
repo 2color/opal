@@ -1,0 +1,20 @@
+IMPLEMENTATION Settings
+
+IMPORT Nat COMPLETELY
+        
+IMPORT WinConfig COMPLETELY
+
+DEF canvasWidth == "200"!
+DEF canvasHeight == "180"!
+DEF canvasSize == canvasWidth x canvasHeight
+DEF usableWidth == canvasWidth - 2 * margin
+DEF margin == "5"!
+DEF glue == "5"!
+DEF lineSpacing == "1"!
+DEF parSpacing == "10"!
+DEF left == margin
+DEF right == canvasWidth-margin
+DEF middle == canvasWidth/2
+DEF canvasBackground == white
+DEF stdFont == variable
+DEF exitButton == "Exit tinyHTML"

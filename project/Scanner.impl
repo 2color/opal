@@ -1,0 +1,111 @@
+IMPLEMENTATION Scanner
+
+IMPORT Seq          COMPLETELY
+       SeqMap       COMPLETELY
+       Denotation   COMPLETELY
+       String       COMPLETELY
+       StringFilter COMPLETELY
+       Char         COMPLETELY
+       Nat          COMPLETELY
+       Bool         COMPLETELY
+       Compose      ONLY o
+       Token        COMPLETELY
+       Map          COMPLETELY
+
+-- Scanning = Partitioning + Translating
+DEF scan(string) == (translate o partition)(string)
+
+
+-- Partition input into its lexemes.
+FUN partition : string -> seq[string]
+DEF partition(text)    == p1(dropWhiteSpace(text))
+
+FUN p1 : string -> seq[string]
+DEF p1(<>)    == <>
+DEF p1(text) ==
+    LET 
+        i == IF lt?(ft(text)) THEN
+                locate(gt?)(text) + 1
+             ELSE 
+                locate(whitespaceOrLt?)(text) 
+             FI
+        (word, rest) == tSplit(i, text)
+    IN word :: partition(rest)
+
+
+
+-- ---------------------------------------------------------------  
+-- Auxilary functions
+-- ---------------------------------------------------------------  
+
+-- drop : nat ** string -> string
+-- drop (k, s)
+-- drop first k components of s
+
+-- split : nat ** string -> string ** string             
+-- split (n, s) = (take (n,s), drop (n,s))
+-- split s after n elements
+
+FUN locate: (char -> bool) -> string -> nat
+DEF locate(p)(<>) == 1
+DEF locate(p)(a :: rest) == 
+    IF p(a)THEN 0
+    ELSE 1 + locate(p)(rest) FI
+
+
+FUN nonWhiteSpace?: char -> bool
+DEF nonWhiteSpace?(c) == not(whitespace?(c))
+
+FUN dropWhiteSpace: string -> string
+DEF dropWhiteSpace(<>) == <>
+DEF dropWhiteSpace(text) ==
+    LET i == locate(nonWhiteSpace?)(text)
+    IN drop(i, text)
+
+FUN lt?: char -> bool
+DEF lt? == !"<" = _
+
+FUN gt?: char -> bool
+DEF gt? == !">" = _
+
+FUN whitespaceOrLt?: char -> bool
+DEF whitespaceOrLt?(c) == whitespace?(c) or lt?(c)
+
+-- Total version of split
+FUN tSplit : nat ** string -> ( string ** string )
+DEF tSplit(i, str) == IF i > #(str) THEN (str, empty)
+                      ELSE split(i, str) FI
+
+
+
+-- Discriminator for seperating lexemes.
+FUN separator? : char -> bool
+DEF separator?(c) == whitespace?(c) or parens?(c)
+
+-- Discriminator for parenthesis.
+FUN parens? : char -> bool
+DEF parens?(c) == c = ("("!) or c = (")"!)
+
+
+-- Function mapping lexemes to their tokens 
+FUN translate : seq[string] -> seq[token]
+DEF translate(strings) == trans * strings
+
+FUN trans : string -> token
+DEF trans(str) == IF def?(str, table) THEN table!str
+                  ELSE word(str) FI
+
+FUN table : map[string,<,token]
+DEF table == 
+    ("<html>"!,                           openHtml)        def
+    ("</html>"!,                          closeHtml)       def
+    ("<title>"!,                          openTitle)       def
+    ("</title>"!,                         closeTitle)      def
+    ("<body>"!,                           openBody)        def
+    ("</body>"!,                          closeBody)       def
+    ("<p style=\"text-align:left\">"!,      pLeft)      def
+    ("<p style=\"text-align:right\">"!,     pRight)     def
+    ("<p style=\"text-align:center\">"!,    pCenter)    def
+    ("<p style=\"text-align:justify\">"!,   pJustify)   def
+    ("</p>"!,                             closeP)          def
+    {}

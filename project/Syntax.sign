@@ -1,0 +1,25 @@
+SIGNATURE Syntax
+
+IMPORT String COMPLETELY
+       Seq COMPLETELY
+
+
+TYPE html       ==  html(title : title, body : body)
+                    fail
+
+TYPE title      ==  title(content : seq[string])
+                    fail
+
+TYPE body       ==  body(content : seq[par])
+                    fail
+
+TYPE par        ==  par(align : alignment, content : seq[string])
+                    fail
+
+TYPE alignment  == left right center justify
+
+
+-- ---------------------------------------------------------------  
+-- get the title from html as a denotation
+-- ---------------------------------------------------------------  
+FUN getTitle : html -> denotation

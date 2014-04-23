@@ -1,0 +1,129 @@
+IMPLEMENTATION TextDemo
+
+IMPORT Com COMPLETELY
+       ComCompose COMPLETELY
+       Denotation COMPLETELY
+       Nat COMPLETELY
+       Real COMPLETELY
+       Seq COMPLETELY
+       Void COMPLETELY
+IMPORT WinButton COMPLETELY
+       WinCanvas COMPLETELY
+       WinCanvasEditor COMPLETELY
+       WinConfig COMPLETELY
+       WinEmitter COMPLETELY
+       WinFontMetrics COMPLETELY
+       WinWindow COMPLETELY
+       WinView COMPLETELY
+
+
+DATA gui == 
+            gui(edit : canvasEditor,
+                emit : emitter[action],
+                title : denotation,
+                metr : metrics)
+
+DATA action == exit
+
+DEF textdemo == 
+                setupGui        & (\\G.
+                setupWindow(G)  & (\\win.
+                drawText(G)     &
+                waitForTermination(G, win)))
+
+
+-- ---------------------------------------------------------------------
+-- Setup of window
+-- ---------------------------------------------------------------------
+FUN setupGui : com[gui]
+DEF setupGui == 
+                canvasEditor            & (\\edit.
+                emitter                 & (\\emit.
+                fontMetrics(stdFont)    & (\\metr.
+                   succeed(gui(edit, emit, "TextDemo", metr)))))
+
+FUN setupWindow : gui -> com[window]
+DEF setupWindow(G) == 
+                        window(frame(G))                & (\\win.
+                        set(win, titleName(title(G)))   & (\\ _ .
+                        grab(win)                       & (\\ _ .
+                        succeed(win))))
+                        
+-- ---------------------------------------------------------------------
+-- Main program
+-- ---------------------------------------------------------------------
+FUN drawText : gui -> com[void]
+DEF drawText(G) == display(edit(G), picture(metr(G)))
+
+FUN picture : metrics -> drawing
+DEF picture(metr) == line ++ text ++ boxedText(metr)
+
+FUN line : drawing
+DEF line == line(%(left @ ("40" px), right @ ("40" px)))
+
+
+FUN text : drawing
+DEF text == above ++ on ++ below
+        WHERE
+        above == text(left @ ("40" px))
+        with (text(sampleText) ++ anchor(south) ++ font(stdFont))
+        on == text(middle @ ("40" px))
+        with (text(sampleText) ++ anchor(center) ++ font(stdFont))
+        below == text(right @ ("40" px))
+        with (text(sampleText) ++ anchor(north-west) ++ font(stdFont))
+
+
+FUN boxedText : metrics -> drawing
+DEF boxedText(metr) == txt ++ box
+WHERE
+  txt == text(upperLeft)
+  with (text(sampleText) ++ anchor(north-west) ++ font(stdFont))
+  
+  upperLeft == middle @ ("100" px)
+  (w, h) == dimensions(metr)(sampleText)
+  lowerRight == xc(upperLeft)+w @ yc(upperLeft)+h
+  box == rectangle(upperLeft, lowerRight)
+
+
+FUN waitForTermination : gui ** window -> com[void]
+DEF waitForTermination(G, win) ==
+await(emit(G)) & (\\act.
+IF act exit? THEN release(win) & delete(win) & exit(0) FI)
+
+-- ---------------------------------------------------------------------
+-- The layout (views)
+-- ---------------------------------------------------------------------
+FUN frame : gui -> view
+DEF frame(G) == pad(edit(G))
+                ^^
+                exitButton(emit(G))
+
+
+FUN pad : canvasEditor -> view
+DEF pad(editor) == canvas with (size(canvasSize)
+                   ++ edit(editor)
+                   ++ background(canvasBackground))
+
+FUN exitButton : emitter[action] -> view
+DEF exitButton(emit) == 
+                        button with (bind(emit, exit)
+                        ++ text("Exit"))
+-- ---------------------------------------------------------------------
+-- Basic settings
+-- ---------------------------------------------------------------------
+FUN canvasWidth canvasHeight : real
+DEF canvasWidth == "320" px
+DEF canvasHeight == "240" px
+FUN canvasSize : size
+DEF canvasSize == canvasWidth x canvasHeight
+FUN margin left right middle : real
+DEF margin == "50" px
+DEF left == margin
+DEF right == canvasWidth-margin
+DEF middle == canvasWidth/2
+FUN canvasBackground : color
+DEF canvasBackground == grey
+FUN sampleText : denotation
+DEF sampleText == "Hallo"
+FUN stdFont : font
+DEF stdFont == variable

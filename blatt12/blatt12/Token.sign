@@ -1,0 +1,8 @@
+SIGNATURE Token
+
+IMPORT Denotation ONLY denotation
+
+TYPE token == or and not impl equiv true false open close
+              error
+
+FUN ` : token -> denotation

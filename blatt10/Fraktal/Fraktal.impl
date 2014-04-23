@@ -1,0 +1,172 @@
+IMPLEMENTATION Fraktal
+
+IMPORT Com COMPLETELY
+       ComCompose COMPLETELY
+       ProcessArgs COMPLETELY
+       Denotation COMPLETELY
+       Nat COMPLETELY
+       Real COMPLETELY
+       Seq COMPLETELY
+       Seq[triangle] COMPLETELY
+       Void COMPLETELY
+
+IMPORT WinButton COMPLETELY
+       WinCanvas COMPLETELY
+       WinCanvasEditor COMPLETELY
+       WinConfig COMPLETELY
+       WinEmitter COMPLETELY
+       WinWindow COMPLETELY
+       WinView COMPLETELY
+
+
+DATA gui == 
+            gui(edit  : canvasEditor,
+                emit  : emitter[action],
+                title : denotation,
+                grad  : nat)
+
+DATA triangle == triangle(p1 : point, p2 : point, p3 : point)
+
+DATA action == exit
+
+DEF fraktal == 
+                argCount        & (\\argCount.
+                IF argCount > 1 THEN 
+                  arg(1)          & (\\grad.
+                  setupGui(grad)  & (\\G.
+                  setupWindow(G)  & (\\win.
+                  displayTriangles(G) &
+                  waitForTermination(G, win))))
+                ELSE
+                  setupGui("1")  & (\\G.
+                  setupWindow(G)  & (\\win.
+                  displayTriangles(G) &
+                  waitForTermination(G, win)))
+                FI)
+
+-- ---------------------------------------------------------------------
+-- Setup of window
+-- ---------------------------------------------------------------------
+FUN setupGui : denotation -> com[gui]
+DEF setupGui(grad) == 
+                canvasEditor            & (\\edit.
+                emitter                 & (\\emit.
+                succeed(gui(edit, emit, "Fraktal | Daniel Norman mtr. 352704",grad!))))
+
+FUN setupWindow : gui -> com[window]
+DEF setupWindow(G) == 
+                        window(frame(G))                & (\\win.
+                        set(win, titleName(title(G)))   & (\\ _ .
+                        grab(win)                       & (\\ _ .
+                        succeed(win))))
+
+
+FUN waitForTermination : gui ** window -> com[void]
+DEF waitForTermination(G, win) ==
+                                await(emit(G)) & (\\act.
+                                IF act exit? THEN release(win) & delete(win) & exit(0)
+                                FI)
+
+                        
+-- ---------------------------------------------------------------------
+-- Triangle Logic 
+-- ---------------------------------------------------------------------
+
+FUN displayTriangles : gui -> com[void]
+DEF displayTriangles(G) == display(edit(G), drawTriangles(grad(G)))
+
+
+FUN drawTriangles : nat -> drawing
+DEF drawTriangles(grad) == 
+    drawTriangle(firstTriangle,color1) ++ removeCenterTriangle(grad,firstTriangle)
+
+
+FUN removeCenterTriangle : nat ** triangle -> drawing
+DEF removeCenterTriangle(grad,t) == 
+    drawTriangle(theTriangle,color2) 
+    ++ removeCenterTriangle(grad-1,t1)
+    ++ removeCenterTriangle(grad-1,t2)
+    ++ removeCenterTriangle(grad-1,t3)
+    WHERE
+      x1 == xc(p1(t)) 
+      y1 == yc(p1(t)) 
+      x2 == xc(p2(t)) 
+      y2 == yc(p2(t)) 
+      x3 == xc(p3(t)) 
+      y3 == yc(p3(t)) 
+      tp1 == x1 @ y1
+      tp2 == x2 @ y2
+      tp3 == x3 @ y3
+      x01 == (xc(p1(t)) +  xc(p2(t)))/2
+      y01 == (yc(p1(t)) +  yc(p2(t)))/2
+      x02 == (xc(p1(t)) +  xc(p3(t)))/2
+      y02 == (yc(p1(t)) +  yc(p3(t)))/2
+      x03 == (xc(p2(t)) +  xc(p3(t)))/2
+      y03 == (yc(p2(t)) +  yc(p3(t)))/2
+      mid01 == x01 @ y01
+      mid02 == x02 @ y02
+      mid03 == x03 @ y03
+      theTriangle == triangle(mid01, mid02, mid03)
+      t1 == triangle(tp1, mid01, mid02)
+      t2 == triangle(tp2, mid01, mid03)
+      t3 == triangle(tp3, mid02, mid03)
+
+DEF removeCenterTriangle(succ(0), _) == {}
+
+
+FUN drawTriangle : triangle ** color -> drawing
+DEF drawTriangle(triangle, c ) == 
+                      polygon(%(p1(triangle),p2(triangle),p3(triangle))) with (fill(c))
+
+FUN halveCoordinates : point -> point
+DEF halveCoordinates(x @ y) == (x/2) @ (y/2)
+
+
+
+-- ---------------------------------------------------------------------
+-- The layout (views)
+-- ---------------------------------------------------------------------
+FUN frame : gui -> view
+DEF frame(G) == pad(edit(G))
+                ^^
+                exitButton(emit(G))
+
+
+FUN pad : canvasEditor -> view
+DEF pad(editor) == canvas with (size(canvasSize)
+                   ++ edit(editor)
+                   ++ background(canvasBackground))
+
+FUN exitButton : emitter[action] -> view
+DEF exitButton(emit) == 
+                        button with (bind(emit, exit)
+                        ++ text("Exit"))
+-- ---------------------------------------------------------------------
+-- Basic settings
+-- ---------------------------------------------------------------------
+FUN canvasWidth canvasHeight : real
+DEF canvasWidth == "600" px
+DEF canvasHeight == "600" px
+
+FUN canvasSize : size
+DEF canvasSize == canvasWidth x canvasHeight
+
+FUN sideLength : real
+DEF sideLength == canvasWidth
+
+FUN canvasBackground color1 color2  : color
+DEF canvasBackground == white
+DEF color2 == turquoise
+DEF color1 == magenta
+
+
+FUN firstTriangle : triangle
+DEF firstTriangle == triangle(p1,p2,p3)
+                      WHERE
+                        h  == (sideLength * (sqrt(3)/2))
+                        p1 == 0 @ h
+                        p2 == sideLength @ h
+                        p3 == (sideLength / 2) @ 0 
+
+
+

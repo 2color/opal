@@ -1,0 +1,5 @@
+SIGNATURE Parser
+
+
+-- Evaluate a given logic formula
+FUN eval : denotation -> denotation

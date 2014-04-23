@@ -1,0 +1,6 @@
+SIGNATURE LayoutDemo
+
+IMPORT Com  ONLY com
+       Void ONLY void
+
+FUN layoutDemo : com[void]

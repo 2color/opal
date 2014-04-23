@@ -1,0 +1,6 @@
+SIGNATURE Fraktal
+
+IMPORT Com ONLY com
+       Void ONLY void
+
+FUN fraktal : com[void]

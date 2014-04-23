@@ -1,0 +1,21 @@
+IMPLEMENTATION Draw
+
+IMPORT Settings COMPLETELY
+       Layout COMPLETELY
+       Seq[posWord] COMPLETELY
+       Seq[point] COMPLETELY
+       WinCanvasEditor COMPLETELY
+       WinConfig COMPLETELY
+
+DEF draw(posWords) == 
+        (drawBorders) ++ (text( pos(this) ) 
+        with (text(text(this)) ++ anchor(west) ++ font(stdFont)) ++ draw(rt(posWords)))
+    WHERE 
+        this == ft(posWords)
+
+DEF draw(<>) == {}
+
+
+FUN drawBorders : drawing
+DEF drawBorders == line( @( margin, margin) :: @( margin, canvasHeight - margin) :: <> ) ++ 
+                   line( @( canvasWidth - margin, margin) :: @( canvasWidth - margin, canvasHeight - margin) :: <> )

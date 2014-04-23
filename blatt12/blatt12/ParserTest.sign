@@ -1,0 +1,8 @@
+SIGNATURE ParserTest
+
+IMPORT Parser COMPLETELY
+       Denotation COMPLETELY
+
+
+
+FUN test : denotation

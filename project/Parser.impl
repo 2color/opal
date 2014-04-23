@@ -1,0 +1,188 @@
+IMPLEMENTATION Parser
+
+IMPORT Token      COMPLETELY
+       Syntax     COMPLETELY
+       Scanner    COMPLETELY
+       Seq[token] COMPLETELY
+       Denotation COMPLETELY
+       Compose    COMPLETELY
+       Bool       COMPLETELY
+
+
+-- Check if a sequence of tokens begins with an error
+FUN error? : seq[token] -> bool
+DEF error?(<>)         == false
+DEF error?(t :: rest) == error?(t)
+
+
+-- Parses a given sequence of tokens.
+DEF parse(input) == 
+    LET
+        (html, rt) == parseH(input)
+    IN
+
+        IF fail?(html) THEN fail
+        ELSE html
+        FI
+
+
+FUN parseH: seq[token] -> html ** seq[token]
+DEF parseH(input) ==
+    LET 
+        r1 == parseOH(input)
+        (title, r2) == parseT(r1)
+        (body, r3) == parseB(r2)
+        r4 == parseCH(r3)
+    IN
+        (html(title, body), r4)
+
+FUN parseT: seq[token] -> title ** seq[token]
+
+DEF parseT(input) ==
+    LET 
+        r1 == parseOT(input)
+        (words, r2) == parseWords(r1)
+        r3 == parseCT(r2)
+    IN
+        IF error?(r3) THEN 
+            (fail, r3)
+        ELSE 
+            (title(words), r3) 
+        FI
+
+
+FUN parseB: seq[token] -> body ** seq[token]
+DEF parseB(input) ==
+    LET 
+        r1 == parseOB(input)
+        (paragraphs, r2) == parsePars(r1)
+        r3 == parseCB(r2)
+    IN
+        IF error?(r3) THEN 
+            (fail, r3)
+        ELSE 
+            (body(paragraphs), r3) 
+        FI
+
+
+FUN parsePars: seq[token] -> seq[par] ** seq[token]
+DEF parsePars(<>) == (<> , <>)
+DEF parsePars(input AS token :: rest) ==
+    IF openPar?(token) THEN 
+        LET (par, r1) == parseP(input)
+            (pars, r2) == parsePars(r1)
+        IN (par :: pars, r2)
+    ELSE (<> , input) 
+    FI
+
+FUN parseP: seq[token] -> par ** seq[token]
+
+DEF parseP(<>) == (fail, error :: <>)
+DEF parseP(pLeft :: rest) ==
+    LET (words, r1) == parseWords(rest)
+        r2 == parseCP(r1)
+    IN 
+        IF error?(r2) THEN (fail, r2)
+        ELSE (par(left, words), r2)
+        FI
+
+DEF parseP(pRight :: rest) == 
+    LET (words, r1) == parseWords(rest)
+        r2 == parseCP(r1)
+    IN 
+        IF error?(r2) THEN (fail, r2)
+        ELSE (par(right, words), r2)
+        FI
+
+
+DEF parseP(pCenter :: rest) == 
+    LET (words, r1) == parseWords(rest)
+        r2 == parseCP(r1)
+    IN 
+        IF error?(r2) THEN (fail, r2)
+        ELSE (par(center, words), r2)
+        FI
+
+
+DEF parseP(pJustify :: rest) == 
+    LET (words, r1) == parseWords(rest)
+        r2 == parseCP(r1)
+    IN 
+        IF error?(r2) THEN (fail, r2)
+        ELSE (par(justify, words), r2)
+        FI
+
+FUN parseWords: seq[token] -> seq[string] ** seq[token]
+
+DEF parseWords(<>) == (<> , <>)
+DEF parseWords(input AS token :: rest) ==
+    IF word?(token) THEN 
+        LET (words, r1) == parseWords(rest)
+        IN (content(token) :: words, r1)
+    ELSE (<> , input) 
+    FI
+
+DEF parseP(input) == (fail, error :: input)
+
+
+
+-- ----------------------------------------------------------------------
+-- Open paragraph descriminator
+-- Checks if the token is one of the four types of opening paragraph tags
+-- ----------------------------------------------------------------------
+FUN openPar? : token -> bool
+DEF openPar?(t) == pLeft?(t) or pRight?(t) or pCenter?(t) or pJustify?(t) 
+
+
+
+-- ---------------------------------------------------------------- 
+-- Parse single html tags.
+-- This works by removing the relevant tag if it's the first tag 
+-- in the list
+-- ----------------------------------------------------------------
+
+FUN parseOH: seq[token] -> seq[token]
+DEF parseOH(<>) == <>
+DEF parseOH(t :: rest) ==
+    IF openHtml?(t) THEN rest
+    ELSE error :: (t :: rest) FI
+
+FUN parseCH: seq[token] -> seq[token]
+DEF parseCH(<>) == <>
+DEF parseCH(t :: rest) ==
+    IF closeHtml?(t) THEN rest
+    ELSE error :: (t :: rest) FI
+
+FUN parseOT: seq[token] -> seq[token]
+DEF parseOT(<>) == <>
+DEF parseOT(t :: rest) ==
+    IF openTitle?(t) THEN rest
+    ELSE error :: (t :: rest) FI
+
+FUN parseCT: seq[token] -> seq[token]
+DEF parseCT(<>) == <>
+DEF parseCT(t :: rest) ==
+    IF closeTitle?(t) THEN rest
+    ELSE error :: (t :: rest) FI
+
+FUN parseOB: seq[token] -> seq[token]
+DEF parseOB(<>) == <>
+DEF parseOB(t :: rest) ==
+    IF openBody?(t) THEN rest
+    ELSE error :: (t :: rest) FI
+
+FUN parseCB: seq[token] -> seq[token]
+DEF parseCB(<>) == <>
+DEF parseCB(t :: rest) ==
+    IF closeBody?(t) THEN rest
+    ELSE error :: (t :: rest) FI
+
+
+FUN parseCP: seq[token] -> seq[token]
+DEF parseCP(<>) == <>
+DEF parseCP(t :: rest) ==
+    IF closeP?(t) THEN rest
+    ELSE error :: (t :: rest) FI
+
+
+
