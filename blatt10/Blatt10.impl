@@ -1,0 +1,81 @@
+IMPLEMENTATION Blatt10
+
+IMPORT  Nat         COMPLETELY
+        WinView     COMPLETELY --everything is a view (and they can )
+        WinConfig   COMPLETELY
+        WinWindow   COMPLETELY --window(view) -> com[window]
+        WinButton   COMPLETELY
+        WinCanvas   COMPLETELY --display(canvasEditor,drawing) -> com[void]
+
+-- ------------------------------------
+-- Type definitions
+-- ------------------------------------
+
+DATA gui == gui(edit : canvasEditor,
+                emit : emitter[action],
+                title : denotation)
+
+DATA action == exit hello
+
+
+
+-- ------------------------------------
+-- Window setup
+-- ------------------------------------
+
+FUN initialize : com[gui]
+DEF initialize == canvasEditor & ( \\edit . 
+                  emitter      & ( \\emit .
+                  succeed(gui(edit,emit, "Hello World Example"))))
+
+
+FUN setupWindow : gui -> com[window]
+DEF setupWindow(g) == window(frame(g))              & ( \\ win. 
+                      set(win, titleName(title(g))) & (
+                      grab(win)                     &
+                      succeed(win)))
+
+
+
+-- ------------------------------------
+-- ALWAYS START HERE WITH FRAME
+-- ------------------------------------
+FUN frame : gui -> view
+DEF frame(g) == pad( edit(g))
+                tilda tilda
+                (helloButton(emit(g)) <<
+                 exitButton(emit(g)))
+
+
+FUN pad : canvasEditor -> view
+DEF pad(editor) == canvas with (size(canvasSize) 
+                                ++ edit(editor)
+                                ++ background(grey)   )
+
+
+FUN helloButton : emitter[action] -> view
+DEF helloButton(emit) == button with (text("Hello World") ++ bind(emit, hello))
+
+FUN exit : emitter[action] -> view
+DEF exit(emit) == button with (text("Exit") ++ bind(emit, exit))
+--
+
+-- ------------------------------------
+-- Basic Settings
+-- ------------------------------------
+FUN canvasWidth canvasHeight : real
+DEF canvasWidth == "500" px
+DEF canvasHeight == "600" px
+
+DEF canvasSize == canvasWidth x canvasHeight
+FUN canvasSize : size
+
+FUN margin top bottom left right : real
+DEF margin == "10" px
+DEF top == margin
+DEF bottom == canvasWidth-margin
+DEF right == margin
+DEF middle == canvasWidth/2
+FUN canvasBackground : color
+
+DEF canvasBackground == grey

@@ -1,0 +1,11 @@
+IMPLEMENTATION PatternMatchingTest
+
+IMPORT	Nat COMPLETELY
+	Option COMPLETELY
+	PatternMatching[nat, >='Nat] COMPLETELY
+
+-- Two tests for the two different cases of the pattern matching
+DEF test == dequeue(pop(init enqueue 10 enqueue 2 enqueue 23)) 
+DEF test2 == dequeue(pop(init)) 
+
+

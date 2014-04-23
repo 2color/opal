@@ -1,0 +1,12 @@
+IMPLEMENTATION BinTreeReduce[alpha, beta]
+
+IMPORT 	BinTree[alpha]	COMPLETELY
+
+
+DEF reduce(f)(e)(nil)                    == e
+DEF reduce(f)(e)(node(val, left, right)) == f(val, reducedLeft, reducedRight)
+  WHERE
+    reducedLeft  == reduce(f)(e)(left)
+    reducedRight == reduce(f)(e)(right)
+
+

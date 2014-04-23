@@ -1,0 +1,7 @@
+SIGNATURE Volume
+
+IMPORT Real ONLY real
+
+FUN generalPyramidVolume : real ** real --> real
+
+FUN tetrahedronVolume : real --> real

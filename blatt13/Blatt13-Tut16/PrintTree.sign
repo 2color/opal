@@ -1,0 +1,8 @@
+SIGNATURE PrintTree[alpha]
+
+IMPORT Denotation     ONLY denotation
+       BinTree[alpha] ONLY binTree[alpha]
+
+SORT alpha
+
+FUN ` : (alpha -> denotation) -> binTree[alpha] -> denotation

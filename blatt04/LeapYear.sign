@@ -1,0 +1,12 @@
+SIGNATURE LeapYear
+
+IMPORT Nat ONLY nat
+
+
+FUN leap? : nat -> bool
+
+
+FUN leapDijkstra? : nat -> bool
+
+
+FUN leapNoIf? : nat -> bool

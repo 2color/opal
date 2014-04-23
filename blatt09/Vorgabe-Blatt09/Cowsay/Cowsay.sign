@@ -1,0 +1,6 @@
+SIGNATURE Cowsay
+
+IMPORT Com COMPLETELY
+IMPORT Void ONLY nil void
+
+FUN cowsay : com[void]

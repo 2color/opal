@@ -1,0 +1,10 @@
+SIGNATURE Blatt03
+
+IMPORT Denotation ONLY denotation
+IMPORT Nat COMPLETELY
+
+FUN splitHalf : denotation -> ( denotation ** denotation)
+--FUN splitHalf : denotation -> denotation
+
+FUN initials : denotation ** denotation ->  denotation
+

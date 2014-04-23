@@ -1,0 +1,34 @@
+IMPLEMENTATION Cowsay
+
+IMPORT Com         COMPLETELY
+       ComCompose  COMPLETELY
+       ProcessArgs COMPLETELY
+       Denotation  COMPLETELY
+       BasicIO     COMPLETELY
+       Nat	   COMPLETELY
+IMPORT File	   COMPLETELY
+IMPORT ComConv	   COMPLETELY
+
+DEF cowsay ==  
+		argCount & (\\a.
+		IF (a = 1) THEN ask("What shall the poor cow say?: ") & cow
+		IF (a = 2) THEN arg(1) & cow
+		IF (a > 2) THEN writeLine("Ouch. Please give your text again in quotation marks or run the program without additional text in the command-line")
+		FI ) 
+
+
+-- auxiliary function for beautiful ascii art & writing in file
+FUN cow : denotation -> com[void]
+DEF cow == \\z. LET
+		deno == " _____________ \n"
+		++ "< " ++ z ++ " > \n"
+		++ " ------------- \n"
+		++ "        \\   ^__^ \n"
+		++ "         \\  (oo)\\_______ \n"
+		++ "            (__)\\       )\\/\\ \n"
+		++ "                ||----w | \n"
+		++ "                ||     || \n"	
+		IN (writeLine(deno) 	&
+		open("cowsay.txt","w")) & (\\cowfile.
+		write(cowfile,deno) 	& 
+		close(cowfile)		)

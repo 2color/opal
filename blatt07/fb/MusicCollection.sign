@@ -1,0 +1,9 @@
+SIGNATURE MusicCollection
+
+IMPORT Nat ONLY nat
+       Seq[album] ONLY seq[album]
+
+TYPE album == album(artist:denotation, title:denotation, year:nat)
+
+FUN ` : album -> denotation
+

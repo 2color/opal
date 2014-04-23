@@ -1,0 +1,6 @@
+SIGNATURE RepairshopTest
+
+IMPORT Denotation COMPLETELY
+
+FUN test : denotation
+

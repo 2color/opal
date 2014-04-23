@@ -1,0 +1,5 @@
+IMPLEMENTATION HelloWorld
+
+IMPORT Real COMPLETELY
+
+DEF sayHello == "Hello World!"

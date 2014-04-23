@@ -1,0 +1,20 @@
+SIGNATURE BinSearchTree[alpha, <]
+
+IMPORT BinTree[alpha] ONLY binTree[alpha] nil
+IMPORT Option[alpha]  ONLY option[alpha]
+
+SORT alpha
+
+FUN < : alpha ** alpha -> bool
+
+
+-- inserts an element into the given tree
+FUN insert: alpha ** binTree[alpha] -> binTree[alpha]
+
+-- finds an element , if it was found it will be returned
+FUN find: alpha ** binTree[alpha] -> option[alpha]
+
+-- deletes an element, if the element isn't in the tree the function
+-- will have no effect
+FUN delete: alpha ** binTree[alpha] -> binTree[alpha]
+

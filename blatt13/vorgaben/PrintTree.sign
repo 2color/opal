@@ -1,0 +1,10 @@
+SIGNATURE PrintTree[alpha]
+
+IMPORT 	Tree[alpha] 			ONLY tree[alpha]
+		Denotation				ONLY denotation
+		BinTree[alpha]			ONLY binTree[alpha]
+		BinSearchTree[alpha,f]	ONLY 
+
+SORT alpha
+
+FUN ` : (alpha -> denotation) -> binTree[alpha] -> denotation

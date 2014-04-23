@@ -1,0 +1,10 @@
+IMPLEMENTATION Aufgabe04
+
+DEF sort (x, y, z) ==   IF x <= y and y <= z THEN (x, y, z)
+                        IF x <= y and z < y and z < x  THEN (z, x, y)
+                        IF x <= y and z < y and x < z  THEN (x, z, y)
+                        IF y < x and x <= z THEN (y, x, z)
+                        IF y < x and z < x and y <= z THEN (y, z, x)
+                        IF y < x and z < x and z < y THEN (z, y, x)
+                        FI
+

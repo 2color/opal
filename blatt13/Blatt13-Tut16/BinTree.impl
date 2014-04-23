@@ -1,0 +1,23 @@
+IMPLEMENTATION BinTree[alpha]
+
+IMPORT Seq[alpha] COMPLETELY
+
+SORT alpha
+
+DATA binTree == nil
+                node(data:alpha, left: binTree, right:binTree)
+
+
+DEF preorder(node(d, l, r)) == d :: (preorder(l) ++ preorder(r))
+DEF preorder(nil) == <>
+
+-- DEF inorder(node(d, l, r)) == +%+(d)(inorder(l), inorder(r) )
+DEF inorder(node(d, l, r)) == inorder(l) ++ (d :: <>) ++ inorder(r)
+DEF inorder(nil) == <>
+
+DEF postorder(node(d, l, r)) == postorder(l) ++ postorder(r) ++ (d :: <>)
+DEF postorder(nil) == <>
+
+-- 
+-- 99,56,2,8,30,62,1,13,80
+-- 99,56,2,8,30,62,1,13,80

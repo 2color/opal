@@ -1,0 +1,4 @@
+TOPSTRUCT  = HelloWorld
+TOPCOM     = helloWorld
+
+OPAL_LIBS += $(OPAL_WIN)

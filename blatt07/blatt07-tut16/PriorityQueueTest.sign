@@ -1,0 +1,8 @@
+SIGNATURE PriorityQueueTest
+
+IMPORT Nat ONLY nat
+       Option ONLY option
+
+
+FUN test : option[nat]
+

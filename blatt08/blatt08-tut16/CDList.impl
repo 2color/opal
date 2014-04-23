@@ -1,0 +1,53 @@
+IMPLEMENTATION CDList
+
+IMPORT	Nat        COMPLETELY
+	NatConv    COMPLETELY
+	Denotation COMPLETELY
+	Seq        COMPLETELY
+
+DATA cd == cd(name:denotation, artist:denotation, year:nat)
+
+-- Example list for testing
+DEF cdlist ==  cd("Abbey Road", "The Beatles", "1969"!)
+           :: (cd("Salisbury", "Uriah Heep", "1971"!)
+           :: (cd("Who's Next", "The Who", "1971"!)
+           :: (cd("Exile On Main St.", "The Rolling Stones", "1972"!)
+           :: (<>))))
+
+DEF `(cd(n, a, y) )== "[" ++ n ++ ", " ++ a ++ ", " ++ `(y) ++ "]" 
+
+-- findCD
+DEF findCDs(cds, y) == IF <>?(cds) THEN <>
+                       ELSE IF year(ft(cds)) = y
+                            THEN name(ft(cds)) :: findCDs(rt(cds), y)
+                            ELSE findCDs(rt(cds), y)
+                            FI
+                       FI          
+
+              
+
+-- findCDs2
+DEF findCDs2(cds, y) == IF <>?(cds) THEN <>
+                        ELSE IF year(ft(cds)) = y
+                             THEN ft(cds) :: findCDs2(rt(cds), y)
+                             ELSE findCDs2(rt(cds), y)
+                             FI
+                        FI          
+
+-- findCD_PM
+DEF findCD_PM(<>, _)        == <>
+DEF findCD_PM(cd :: cds, y) == IF year(cd) = y 
+                               THEN name(cd) :: findCD_PM(cds, y)
+                               ELSE findCD_PM(cds, y)
+                               FI
+
+-- DEF findCD_PM(cd(name, _, y1) :: cds, y2) == IF y1 = y2
+--                                              THEN name :: findCD_PM(cds, y2)
+--                                              ELSE findCD_PM(cds, y2)
+--                                              FI
+
+
+
+
+
+

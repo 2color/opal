@@ -1,0 +1,9 @@
+SIGNATURE TreeTest
+
+IMPORT Nat	    ONLY nat:SORT
+IMPORT Seq	    ONLY seq:SORT
+IMPORT BinTree[nat] ONLY binTree:SORT
+
+FUN exampleTree : binTree[nat]
+FUN test : denotation
+

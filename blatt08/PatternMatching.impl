@@ -1,0 +1,50 @@
+IMPLEMENTATION PatternMatching[entry, >=]
+
+IMPORT  Seq        COMPLETELY
+    SeqConv    COMPLETELY
+IMPORT  Option     COMPLETELY
+IMPORT  Nat        COMPLETELY
+IMPORT  Bool       COMPLETELY
+IMPORT  Denotation COMPLETELY
+IMPORT  Compose    COMPLETELY
+
+DATA priorityQueue == prio(content: seq[entry])
+
+DEF init == prio(<>)
+
+DEF # == # o content
+
+FUN ` : (entry -> denotation) -> priorityQueue -> denotation
+DEF `(eToD) (prio(<>)) == ""
+DEF `(eToD) (prio(q::Q)) == +/+(" >= ") (eToD(q), `(eToD)(prio(Q)))
+
+
+
+FUN enqueue : priorityQueue ** entry -> priorityQueue
+
+DEF enqueue(prio(<>), e) == prio(e :: <>)
+
+DEF enqueue(prio(q::Q), e) == 
+    LET 
+        head == q 
+        rest == Q
+    IN 
+        IF head >= e
+        THEN prio(head :: content(enqueue(prio(rest), e)))
+        ELSE prio(e :: head :: rest)
+        FI
+
+FUN dequeue : priorityQueue -> option[entry]
+
+DEF dequeue(prio(<>)) == nil
+
+DEF dequeue(prio(q::Q)) == avail(q)
+
+FUN pop : priorityQueue -> priorityQueue
+
+DEF pop(prio(<>)) == prio(<>)
+
+DEF pop(prio(q::Q)) == prio( Q )
+
+
+

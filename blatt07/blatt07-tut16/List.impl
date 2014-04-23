@@ -1,0 +1,13 @@
+IMPLEMENTATION List
+
+IMPORT Nat      COMPLETELY
+       NatConv  COMPLETELY
+       Seq[nat] COMPLETELY
+       Denotation COMPLETELY
+
+
+
+FUN ` : seq[nat] -> denotation
+DEF `(list) == IF <>?(list) THEN ""
+               ELSE `(ft(list)) ++ ", " ++ `(rt(list))
+               FI

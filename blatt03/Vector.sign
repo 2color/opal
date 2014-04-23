@@ -1,0 +1,12 @@
+SIGNATURE Vector
+
+IMPORT Real ONLY real
+
+FUN add     : (real ** real) ** (real ** real) -> (real ** real)
+FUN sub     : (real ** real) ** (real ** real) -> (real ** real)
+FUN mult    : (real ** real) ** (real ** real) -> real
+-- Overloading of the function. Opal distingueshes based on the types
+FUN mult    :  real ** (real ** real)          -> ( real ** real )
+FUN abs     : (real ** real)                   -> real
+FUN angle   : (real ** real) ** (real ** real) -> real
+FUN norm    : (real ** real)                   -> (real ** real)

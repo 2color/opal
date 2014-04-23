@@ -1,0 +1,5 @@
+SIGNATURE Addition
+
+IMPORT Nat COMPLETELY
+
+FUN + : nat ** nat -> nat

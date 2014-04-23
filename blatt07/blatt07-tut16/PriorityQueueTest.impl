@@ -1,0 +1,14 @@
+IMPLEMENTATION PriorityQueueTest
+
+IMPORT	Nat COMPLETELY
+	Option COMPLETELY
+	PriorityQueue[nat, >='Nat] COMPLETELY
+
+
+DEF test == dequeue(pop(init enqueue 10 enqueue 2 enqueue 23))
+
+-- 1. [23, 10, 2]
+-- 2. pop([23, 10, 2]) ~> [10, 2]
+-- 3. dequeue([10, 2]) ~> 10
+
+

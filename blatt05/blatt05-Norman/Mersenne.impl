@@ -1,0 +1,20 @@
+IMPLEMENTATION Mersenne
+
+IMPORT Nat COMPLETELY
+	Prim ONLY prim
+	Denotation ONLY ++
+	NatConv ONLY `
+	BoolConv ONLY `
+
+DEF mersenne(p) == 2^p - 1
+
+-- eingabe a < b
+DEF runTest(a, b) ==
+			IF a > b THEN ""
+			ELSE
+				IF prim(a) = true THEN "p=" ++ `(a) ++ ", M(p)=" ++ `(mersenne(a)) ++ ", prim(M(p))=" ++ `(prim(mersenne(a))) ++ "\n" ++ runTest(a+1,b)
+				ELSE runTest(a+1,b)
+				FI
+			FI
+
+			

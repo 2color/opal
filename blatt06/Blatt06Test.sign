@@ -1,0 +1,6 @@
+SIGNATURE Blatt06Test 
+
+IMPORT Blatt06 COMPLETELY
+    Denotation ONLY denotation
+
+FUN runTest : denotation

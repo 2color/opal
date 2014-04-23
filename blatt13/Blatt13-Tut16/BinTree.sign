@@ -1,0 +1,23 @@
+SIGNATURE BinTree[alpha]
+
+IMPORT Seq[alpha] ONLY seq[alpha]
+
+SORT alpha
+
+TYPE binTree == nil
+                node(data:alpha, left: binTree, right:binTree)
+
+
+
+FUN preorder : binTree[alpha] -> seq[alpha]
+
+FUN inorder : binTree[alpha] -> seq[alpha]
+
+FUN postorder : binTree[alpha] -> seq[alpha]
+
+
+-- 30, 56, 99, 8, 2, 13, 62, 1, 80 d,l,r  preOrder
+
+-- 99, 56, 2, 8, 30, 62, 1, 13, 80 l,d,r  inOrder
+
+-- 99, 2, 8, 56, 1, 62, 80, 13, 30 l,r,d  postorder

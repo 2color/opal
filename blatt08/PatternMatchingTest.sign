@@ -1,0 +1,9 @@
+SIGNATURE PatternMatchingTest
+
+IMPORT Nat ONLY nat
+       Option ONLY option
+
+
+FUN test : option[nat]
+FUN test2 : option[nat]
+

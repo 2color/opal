@@ -1,0 +1,5 @@
+SIGNATURE Cubic
+
+IMPORT Nat COMPLETELY
+
+FUN cubic: nat -> nat

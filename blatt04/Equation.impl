@@ -1,0 +1,10 @@
+IMPLEMENTATION Equation
+
+IMPORT Real COMPLETELY
+
+
+DEF pq(p,q) == LET
+                x == p / 2
+                y == sqrt((x^2) - q)
+               IN
+                (-(x) + y, -(x) - y)

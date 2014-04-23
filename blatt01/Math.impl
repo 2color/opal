@@ -1,0 +1,10 @@
+IMPLEMENTATION Math
+
+IMPORT Real COMPLETELY
+
+DEF mul2 == \\x. 2*x
+
+FUN PI: real
+DEF PI == "3.14"!
+
+DEF spherePerimeter == \\radius. mul2(PI*radius)

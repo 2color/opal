@@ -1,0 +1,9 @@
+SIGNATURE Mersenne
+
+IMPORT Nat ONLY nat
+
+-- Calculate the mersenne of a natural number
+FUN mersenne: nat -> nat
+
+-- Tests if the mersenne number of a prime number between the range given is also a prime number
+FUN runTest: nat ** nat -> denotation

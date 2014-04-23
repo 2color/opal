@@ -1,0 +1,9 @@
+IMPLEMENTATION Volume
+
+IMPORT Real COMPLETELY
+
+DEF generalPyramidVolume(g,h) == (1/3) * g * h
+
+DEF tetrahedronVolume(a) == generalPyramidVolume(((sqrt(3) / 4 ) * pow(a,2) ), (sqrt(6)/3) * a)
+
+

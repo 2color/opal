@@ -1,0 +1,18 @@
+SIGNATURE CDList
+
+IMPORT Seq        ONLY seq
+       Nat        ONLY nat
+       Denotation ONLY denotation
+
+
+TYPE cd == cd(name:denotation, artist:denotation, year:nat)
+
+FUN cdlist: seq[cd]
+
+FUN ` : cd -> denotation
+
+FUN findCDs: seq[cd] ** nat -> seq[denotation]
+
+FUN findCDs2: seq[cd] ** nat -> seq[cd]
+
+FUN findCD_PM: seq[cd] ** nat -> seq[denotation]

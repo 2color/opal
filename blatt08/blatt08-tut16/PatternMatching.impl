@@ -1,0 +1,39 @@
+IMPLEMENTATION PatternMatching[entry, >=]
+
+IMPORT	Seq        COMPLETELY
+	SeqConv    COMPLETELY
+IMPORT	Option     COMPLETELY
+IMPORT	Nat        COMPLETELY
+IMPORT	Bool       COMPLETELY
+IMPORT  Denotation COMPLETELY
+IMPORT	Compose    COMPLETELY
+
+DATA priorityQueue == prio(content: seq[entry])
+
+DEF init == prio(<>)
+
+DEF # == # o content
+
+FUN ` : (entry -> denotation) -> priorityQueue -> denotation
+DEF `(eToD) (prio(<>)) == ""
+DEF `(eToD) (prio(q::Q)) == +/+(" >= ") (eToD(q), `(eToD)(prio(Q)))
+
+
+
+-- TODO
+-- FUN enqueue : priorityQueue ** entry -> priorityQueue
+
+
+
+
+-- TODO
+-- FUN dequeue : priorityQueue -> option[entry]
+
+
+
+
+-- TODO
+-- FUN pop : priorityQueue -> priorityQueue
+
+
+

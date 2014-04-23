@@ -1,0 +1,51 @@
+-- Berechenbarkeit
+-- Locale hilfsfunctionen
+-- Turing-berechenbar 
+-- rekursion
+
+FUN roots: real ** real real -> real ** real
+
+DEF roots(a,b,c) ==
+    (x1,x2)
+    WHERE
+    x1 == (-b+d) / (2*a)
+    x2 == (-b-d) / (2*a)
+    d  == sqrt( (b*b) - (4*a*c) )
+
+
+DEF squareSum(a,b) == 
+    LET
+    sq == \\x. x * x
+    IN
+    sq(a) + sq(b)
+
+
+-- NICHT ERLAUBT && HÄSSLICH
+DEF roots(a,b,c) == ( LET 
+    x1 == (-b+d)/(2*a)
+    x2 == (-b-d)/(2*a)
+    IN
+    (x1,x2))
+    WHERE
+    d == sqrt( (b*b) -4*a*c )
+
+
+
+--warum funktioniert rekursion  
+
+FUN fact : nat -> nat
+DEF fact(n) == 
+    IF n > 0 THEN n * fact(n-1)
+    IF n = 0 THEN 1
+    FI
+
+-- unendlich loop | terminiert nicht
+FUN fact : nat -> nat
+DEF fact(n) == 
+    IF n > 0 THEN n * fact(n)
+    IF n = 0 THEN 1
+    FI
+
+
+
+

@@ -1,0 +1,44 @@
+Klassifikation Rekursiver Situationen
+
+
+Repetitive Iterative Rekursion ( tail rekursion )
+
+```
+DEF mod(a,b) ==
+    IF a < b THEN a
+    IF a >= b THEN mod(a-b,b) FI
+
+```
+
+Lineare Rekursion
+```
+DEF fact(n) == 
+    IF n = 0 THEN 1
+    FI n > 0 THEN n * fact(n-1)
+    FI
+```
+
+Manchmal kann man lineare Rekursion systematisch in repetitive Rekursion umformen
+
+
+```
+fact(n) == 
+    IF n = 0 THEN 1
+    IF n > 0 THEN fact(n-1) * n FI
+```
+
+
+Geschachtelte Rekursion ( nested recursion )
+```
+DEF mod(a,b) ==
+    IF a < b THEN a
+    IF b <= a & a < 2*b THEN a-b
+    IF a>= 2*b THEN mod()
+```
+
+
+DEF ack(m,n) ==
+    IF m = 0 THEN n+1
+    IF m > 0 & n = 0 THEN ack(m-1, 1)
+    IF m > 0 & n > 0 THEN ack(m-1,ack(m,n-1))
+    FI

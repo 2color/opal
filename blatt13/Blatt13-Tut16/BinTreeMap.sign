@@ -1,0 +1,9 @@
+SIGNATURE BinTreeMap[alpha, beta]
+
+IMPORT BinTree[alpha] ONLY binTree 
+       BinTree[beta]  ONLY binTree
+
+SORT alpha
+SORT beta
+
+FUN map : (alpha -> beta) -> (binTree[alpha] -> binTree[beta])

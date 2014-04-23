@@ -1,0 +1,12 @@
+SIGNATURE University
+
+IMPORT Nat COMPLETELY
+       Real COMPLETELY
+
+
+TYPE student == student(matr: nat, year: nat, semester: nat)
+
+
+TYPE teacher == tutor(hours: nat, euro: real)
+                wimi(hours: nat, euro: real, bonus: real)
+                prof(euro: real, fg: denotation)

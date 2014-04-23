@@ -1,0 +1,17 @@
+IMPLEMENTATION Wct
+
+IMPORT Real COMPLETELY
+
+
+-- internal/private function
+FUN aufzinsfaktor : real -> real
+DEF aufzinsfaktor == \\p. 1 + (p/100)
+
+-- 3.2. (Pﬂicht-Hausaufgabe) Windchill-Temperatur   
+DEF wct == \\t,v. ("13.12"!) + ("0.6215"!) * t - ("11.37"!) * pow(v,("0.16"!)) + ("0.3965"!) * t * pow(v,("0.16"!))
+
+-- 3.3. (Pﬂicht-Hausaufgabe) Zinseszins
+DEF zin == \\k,q,n. k * pow(aufzinsfaktor(q),n)
+
+-- 3.4. (Pﬂicht-Hausaufgabe) Sparkassenformel
+DEF sparkasse == \\k,q,r,n. k * pow(aufzinsfaktor(q),n) + r * ( ( pow(aufzinsfaktor(q),n) - 1  ) / ( aufzinsfaktor(q) - 1 ) )

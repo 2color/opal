@@ -1,0 +1,118 @@
+IMPLEMENTATION Blatt07
+
+IMPORT Nat COMPLETELY
+       Real COMPLETELY
+       Denotation COMPLETELY
+       NatConv COMPLETELY
+       RealConv COMPLETELY
+       University COMPLETELY
+       Seq[student] COMPLETELY
+       Seq[tutorial] COMPLETELY
+
+
+-- first data type - tutorial
+DATA tutorial == tutorial(subject : subject, tutnr : nat , teacher : teacher , students : seq[student])
+
+SORT tutorial
+
+-- constructor
+FUN tutorial : subject ** nat ** teacher ** seq[student] -> tutorial
+
+-- selectors
+FUN subject : tutorial -> subject
+FUN tutnr : tutorial -> nat
+FUN teacher : tutorial -> teacher
+FUN students : tutorial -> seq[student]
+
+-- discriminators
+FUN tutorial? : tutorial -> bool
+
+-- second data type subject
+DATA subject == MPGI1 TechGI1 LinA
+
+SORT subject
+
+-- constructor
+FUN MPGI1 TechGI1 LinA : subject
+
+-- discriminators
+FUN MPGI1? TechGI1? LinA? : subject -> bool
+
+
+-- ------------------------------------------
+-- ---------- Aufgabe 1.4 -------------------
+
+-- Calculates the average year of a tutorial
+DEF averageYear(tutorial) == 
+    IF <>?(students(tutorial)) THEN asReal(0)
+    ELSE sumYears(students( tutorial )) / asReal( #( students(tutorial) ) )
+    FI
+
+-- Calculates the average year of a sequence of tutorials
+DEF averageYear(seqTutorials) == 
+    IF <>?(seqTutorials) THEN asReal(0)
+    ELSE sumYears(seqTutorials) / countStudents(seqTutorials)
+    FI
+
+-- Calculates the number of student
+FUN countStudents : seq[tutorial] -> real
+DEF countStudents(tutorials) == 
+    IF <>?(tutorials) THEN asReal(0)
+    ELSE asReal(#(students(ft(tutorials)))) + (countStudents(rt(tutorials)) )
+    FI
+
+
+-- Help function that calculates the sum of years of a sequence of students
+FUN sumYears : seq[student] -> real
+DEF sumYears(students) ==  
+    IF( #(students) = 0 ) THEN 0
+    ELSE asReal( year( ft(students) ) ) + sumYears( rt(students) )  
+    FI
+
+
+-- Help function that calculates the sum of years of a sequence of tutorials
+FUN sumYears : seq[tutorial] -> real
+DEF sumYears(tutorials) ==  
+    IF( #(tutorials) = 0 ) THEN 0
+    ELSE sumYears(students(ft(tutorials))) + sumYears( rt(tutorials) )  
+    FI
+
+
+-- ------------------------------------------
+-- ---------- Test Functions ----------------
+DEF test == 
+    "Test of Modulke Blatt07" ++ "\n" ++
+    "--------------------------" ++ "\n" ++
+    "Test Data can be found in Blatt07.impl " ++ "\n" ++
+    "Due to the conversion from real to denotation the numbers may seem off. however they are correct as real \n" ++
+    "--------------------------" ++ "\n" ++
+    "Average Year of a single tutorial ( tutorial3 ) from the test data: " ++ `(averageYear(tutorial3)) ++ "\n" ++
+    "Average Year of a sequence of tutorials ( tutorials ) from the test data: " ++ `(averageYear(tutorials)) ++ "\n"
+
+
+-- ------------------------------------------
+-- ---------- Test Data ---------------------
+FUN student1 student2 student3 student4 student5 : student
+DEF student1 == student(1, "2014"!, 1)
+DEF student2 == student(2, "2013"!, 3)
+DEF student3 == student(3, "2012"!, 5)
+DEF student4 == student(4, "2011"!, 7)
+DEF student5 == student(5, "2010"!, 9)
+
+FUN tutor1 : teacher
+DEF tutor1 == tutor(10, 100)
+FUN wimi1 : teacher
+DEF wimi1 == wimi(10, 100, 100 )
+FUN prof1 : teacher
+DEF prof1 == prof(1000, "Informatik")
+
+
+FUN tutorial1 tutorial2 tutorial3 : tutorial
+DEF tutorial1 == tutorial( MPGI1, 1, prof1, student1 :: student2 :: student3 :: student4 :: student5 :: <> )
+DEF tutorial2 == tutorial( MPGI1, 1, prof1, <> )
+DEF tutorial3 == tutorial( TechGI1, 2, tutor1 , student1 :: student2 :: <> )
+
+
+FUN tutorials : seq[tutorial]
+DEF tutorials == tutorial1 :: tutorial2 :: tutorial3 :: <> 
+

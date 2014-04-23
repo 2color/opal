@@ -1,0 +1,83 @@
+IMPLEMENTATION MusicCollection
+
+IMPORT Nat COMPLETELY
+       NatConv ONLY `
+       Denotation COMPLETELY
+       Seq[album] COMPLETELY
+       SeqConv[album] COMPLETELY
+       Seq        COMPLETELY
+       Char       COMPLETELY
+       Bool       COMPLETELY
+
+DATA album == album(artist:denotation, title:denotation, year:nat)
+
+-- Eine kleine Sammlung zum testen
+FUN musicCollection : seq[album]
+DEF musicCollection ==
+    album("The Chemical Brothers", "Greatest Hits", "2002"!)
+    :: album("Tom Jones", "All you need is love", "1993"!)
+    :: album("Beatles", "All you need is love", "1967"!)
+    :: album("Canadian Brass", "All you need is love", "1998"!)
+    :: album("Jamiroquai", "Greatest Hits", "1996"!)
+    :: <>
+
+-- Backtick zum testen
+FUN ` : album -> denotation
+DEF `(album(artist, title, year)) == 
+    "album(Artist: " ++ artist ++", Title: " ++ title ++ ", Jahr: " ++ `(year) ++ ")"
+
+-- 2.2. Sortieren nach Erscheinungsjahr
+FUN sortYear: seq[album] -> seq[album]
+DEF sortYear(<>) == <>
+DEF sortYear(l :: list) == l insert sortYear(list)
+
+FUN insert: album ** seq[album] -> seq[album]
+DEF element insert <> == element :: <>
+DEF element insert (l :: list) ==
+	IF year(l) >= year(element) THEN element::(l::list)
+        ELSE l::(element insert list)
+	FI
+
+-- 2.3. Sortieren nach Titel
+-- TODO (HA): sortTitle implementieren
+FUN sortTitle : seq[album] -> denotation
+DEF sortTitle(<>) == ""
+DEF sortTitle(list) == transfer(sorttitle(list))
+
+-- Mergesort
+FUN sorttitle : seq[album] -> seq[album]
+DEF sorttitle(<>) == <>
+DEF sorttitle(a :: <>) == a :: <>
+DEF sorttitle(List) == LET i==((#(List))/2) 
+                            (left,right)==split(i,List)
+                        IN merge(sorttitle(left),sorttitle(right))
+
+FUN merge : seq[album] ** seq[album] -> seq[album]
+DEF merge(<>,<>) == <>
+DEF merge(a,<>)  == a
+DEF merge(<>,b)  == b
+DEF merge(l::left,r::right) == IF (title(l)<title(r)) THEN l::(merge(left,r::right))
+                               ELSE r::(merge(l::left,right))
+                               FI 
+
+-- Hilfsfunktionen
+FUN transfer : seq[album] -> denotation
+DEF transfer(<>) == ""
+DEF transfer(a::list) == (`(a)) ++ transfer(list)
+
+FUN ` : album -> denotation
+DEF `(a) == (artist(a)) ++ "," ++ (title(a)) ++ "," ++ (`(year(a))) ++ %(newline)
+
+-- 2.4. Sortieren nach Titel und Erscheinungsjahr
+-- TODO (HA): sortTitleYear implementieren
+FUN sortTitleYear : seq[album] -> denotation
+DEF sortTitleYear(<>) == ""
+DEF sortTitleYear(list) == transfer(sorttitleyear(list))
+
+FUN sorttitleyear : seq[album] -> seq[album]
+DEF sorttitleyear(<>) == <>
+DEF sorttitleyear(List) == LET newList==sorttitle(List)
+                            IN  sortYear(newList)
+
+
+

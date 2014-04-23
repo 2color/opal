@@ -1,0 +1,9 @@
+SIGNATURE Aufgabe2
+
+IMPORT Nat ONLY nat
+
+-- calculates ! ( the factor )
+FUN product: nat -> nat
+
+-- calculates the sum of the digits in a natural number
+FUN digitSum: nat -> nat

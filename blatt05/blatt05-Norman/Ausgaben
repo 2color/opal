@@ -1,0 +1,8 @@
+p=2, M(p)=3, prim(M(p))=true
+p=3, M(p)=7, prim(M(p))=true
+p=5, M(p)=31, prim(M(p))=true
+p=7, M(p)=127, prim(M(p))=true
+p=11, M(p)=2047, prim(M(p))=false
+p=13, M(p)=8191, prim(M(p))=true
+
+The mersenne number of a prime number is not always a prime number

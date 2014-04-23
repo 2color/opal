@@ -1,0 +1,18 @@
+IMPLEMENTATION Blatt06Test 
+
+IMPORT Blatt06 COMPLETELY
+    Denotation COMPLETELY
+    Char COMPLETELY
+    Nat COMPLETELY
+    NatConv ONLY `
+
+-- test function that calls all the scenarios from the excercise 
+DEF runTest ==
+    "applyToChunk(lalala, upper,1,3) \n  returns " ++ applyToChunk("lalala", upper, 1, 3) ++ "\n" ++
+    "half^2(16) \n  returns " ++ `(^(half,2)(16)) ++ "\n" ++
+    "specCombine(pred,1)(pred,1)(10) \n returns " ++ `(specCombine(pred,1)(pred,1)(10)) ++ "\n" ++
+    "specCombine(succ,5)(pred,1)(10) \n returns " ++ `(specCombine(succ,5)(pred,1)(10)) 
+-- the following calls were meant to be included but the cause a runtime error
+    --"specCombine(succ,5)(pred,4)(1) \n returns " ++ `(specCombine(succ,5)(pred,4)(1)) 
+    --"specCombine(succ,5)(pred,4)(max) \n returns " ++ `(specCombine(succ,5)(pred,4)(max)) 
+

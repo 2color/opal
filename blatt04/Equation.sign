@@ -1,0 +1,5 @@
+SIGNATURE Equation
+
+IMPORT Real ONLY real
+
+FUN pq: real ** real -> real ** real

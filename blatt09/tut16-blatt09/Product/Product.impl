@@ -1,0 +1,34 @@
+IMPLEMENTATION Product
+
+IMPORT Com         COMPLETELY
+       ComCompose  COMPLETELY
+       ProcessArgs COMPLETELY
+       Denotation  COMPLETELY
+       BasicIO     COMPLETELY
+       Nat         COMPLETELY
+       NatConv     ONLY `
+       Seq         ONLY ft rt
+
+
+-- 1. Variante: mit args
+DEF product == 	args     & (\\ arguments.
+                argCount & (\\ n. 
+		IF (n |= 3) THEN 
+		  writeLine("Wrong number of arguments")
+                ELSE 
+		  LET x    == ft(arguments rt)
+		      y    == ft(rt(arguments rt)) 
+		      prod == (x!) * (y!)
+                  IN writeLine("Product: " ++ `(prod)) 
+                FI ))
+
+
+-- 2. Variante: mit arg(N)
+DEF product == 	argCount & (\\ n. 
+                IF (n |= 3) THEN 
+		  writeLine("Wrong number of arguments")
+		ELSE 
+		  arg(1) & (\\ x.
+		  arg(2) & (\\ y.
+		  writeLine("Product: " ++ `((x!) * (y!))) ))
+		FI )

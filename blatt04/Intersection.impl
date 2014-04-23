@@ -1,0 +1,8 @@
+IMPLEMENTATION Intersection
+
+IMPORT Real COMPLETELY
+
+
+DEF intersectionPoint(m1, n1, m2, n2) == LET x == (n2 - n1) / (m1 - m2)
+                                             y == m1 * x + n1
+                                         IN (x, y)

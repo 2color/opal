@@ -1,0 +1,87 @@
+IMPLEMENTATION TreeTest
+
+IMPORT Nat		COMPLETELY
+IMPORT Seq[nat]      	COMPLETELY
+IMPORT BinTree COMPLETELY
+IMPORT Denotation COMPLETELY
+IMPORT PrintTree COMPLETELY
+IMPORT NatConv ONLY `
+IMPORT SeqConv   COMPLETELY
+IMPORT BinSearchTree[nat, <]   COMPLETELY
+IMPORT StudentDB   COMPLETELY
+
+
+DEF test == 
+    "------------------------------------------------------\n" ++
+    "Tree Test Module \n" ++
+    "------------------------------------------------------\n" ++
+    "preorder \n" ++
+    `(`'NatConv)(exampleTree) ++ "\n" ++
+    `(`'NatConv)(preorder(exampleTree)) ++ "\n" ++
+    "------------------------------------------------------\n" ++
+    "inorder \n" ++
+    `(`'NatConv)(exampleTree) ++ "\n" ++
+    "\n" ++
+    `(`'NatConv)(inorder(exampleTree)) ++ "\n" ++
+    "\n------------------------------------------------------\n" ++
+    "postorder \n" ++
+    `(`'NatConv)(exampleTree) ++ "\n" ++
+    "\n" ++
+    `(`'NatConv)(postorder(exampleTree)) ++ "\n" ++
+    "\n------------------------------------------------------\n" ++
+    -- "delete \n" ++
+    -- "before delete \n" ++
+    -- `(`'NatConv)(exampleSearchTree) ++ "\n" ++
+    -- "\n" ++
+    -- "after deleting 17 \n" ++
+    -- `(`'NatConv)(delete("17"!,exampleSearchTree)) ++ "\n" ++
+    -- "\n------------------------------------------------------\n" ++
+    -- "delete \n" ++
+    -- "before delete \n" ++
+    -- `(`'NatConv)(exampleSearchTree) ++ "\n" ++
+    -- "\n" ++
+    -- "after deleting 29 \n" ++
+    -- `(`'NatConv)(delete("29"!,exampleSearchTree)) ++ "\n" ++
+    -- "\n------------------------------------------------------\n" ++
+    -- "student tree \n" ++
+    -- "as a tree (only the matric number for simplicity) \n" ++
+    -- `(\\st. `(matric(st)))(studentTree) ++ "\n" ++
+    -- "\n" ++
+    -- "as an ordered list \n" ++
+    -- `(`'StudentDB)(studentList(studentTree)) ++ "\n" ++
+    "\n------------------------------------------------------"
+
+
+FUN exampleSearchTree : binTree[nat]
+DEF exampleSearchTree == ("31"!) insert ("76"!) insert ("10"!) insert ("54"!) insert ("63"!) insert ("32"!) insert ("24"!) insert ("6"!) insert ("2"!) insert ("9"!) insert ("17"!) insert ("29"!) insert ("76"!) insert nil
+
+
+DEF exampleTree ==
+        node("30"!,
+		node("56"!,
+			node("99"!,
+				nil,
+				nil
+			),
+			node("8"!,
+				node("2"!,
+					nil,
+					nil
+				),
+				nil
+			)
+		),
+		node("13"!,
+			node("62"!,
+				nil,
+				node("1"!,
+					nil,
+					nil
+				)
+			),
+			node("80"!,
+				nil,
+				nil
+			)
+		)
+	)

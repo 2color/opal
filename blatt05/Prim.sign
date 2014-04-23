@@ -1,0 +1,5 @@
+SIGNATURE Prim
+
+IMPORT Nat COMPLETELY
+
+FUN prim : nat -> bool

@@ -1,0 +1,20 @@
+SIGNATURE StudentDB
+
+IMPORT Nat                      ONLY nat
+       Real                     ONLY real
+       BinSearchTree[student,<]	ONLY binTree[student]
+       Seq[student]             ONLY seq[student]
+
+-- datatypes
+TYPE student == student(matric: nat, name:denotation, surname: denotation, sex:sex)
+TYPE sex == m f
+
+-- studentList
+FUN studentList : binTree[student] -> seq[student]
+
+
+FUN studentTree : binTree[student]
+
+-- order
+FUN < : student ** student -> bool
+FUN ` : student -> denotation

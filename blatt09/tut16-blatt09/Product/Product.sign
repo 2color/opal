@@ -1,0 +1,6 @@
+SIGNATURE Product
+
+IMPORT Com  ONLY com
+       Void ONLY void
+		
+FUN product : com[void]

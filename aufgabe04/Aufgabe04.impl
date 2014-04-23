@@ -1,0 +1,32 @@
+IMPLEMENTATION Aufgabe04
+
+-- make the intersectionPoint from the tutorial a local function
+FUN intersectionPoint : real ** real ** real ** real -> real ** real
+
+-- Based on the original implementation with the if else's these rules match
+-- all the cases I could come up with have been tested.
+-- 
+DEF sort (x, y, z) ==   IF x <= y and y <= z THEN (x, y, z)
+                        IF x <= y and z < y and z < x  THEN (z, x, y)
+                        IF x <= y and z < y and x < z  THEN (x, z, y)
+                        IF y < x and x <= z THEN (y, x, z)
+                        IF y < x and z < x and y <= z THEN (y, z, x)
+                        IF y < x and z < x and z < y THEN (z, y, x)
+                        FI
+
+
+-- This method calculates the m and n values for each of the two pairs of cordinates 
+-- Then by using the intersectionPoint( overloaded based on types) it finds the point of intersection
+-- a check if they are parallel has been omitted for the sake of simplicity
+DEF intersectionPoint(x1, y1, x2, y2, x3, y3, x4, y4) == intersectionPoint(m1,n1,m2,n2)
+    WHERE
+            m1 == ( y2 - y1 ) / ( x2 - x1 ) 
+            m2 == ( y4 - y3 ) / ( x4 - x3 ) 
+            n1 == ( y1 - ( m1 * x1 ) )
+            n2 == ( y3 - ( m2 * x3 ) )
+
+
+
+DEF intersectionPoint(m1, n1, m2, n2) == LET x == (n2 - n1) / (m1 - m2)
+                                             y == m1 * x + n1
+                                         IN (x, y)

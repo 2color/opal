@@ -1,0 +1,8 @@
+IMPLEMENTATION Addition
+
+IMPORT Nat ONLY succ pred 0
+
+
+DEF +(x, y) == IF y = 0 THEN x
+               ELSE succ(x) +'Addition pred(y) -- Recursive defoinition of +
+               FI

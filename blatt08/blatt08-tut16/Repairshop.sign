@@ -1,0 +1,34 @@
+SIGNATURE Repairshop
+
+IMPORT Real ONLY real
+       Seq  ONLY seq
+       Nat  ONLY nat
+
+TYPE vehicle == car bike truck
+TYPE status == open inProgress finished
+TYPE job == job(object: vehicle, status: status, cost: real)
+
+-- Beispiel list zum Testen
+FUN joblist: seq[job]
+
+-- compare status and vehicle type
+FUN = : status ** status -> bool
+FUN = : vehicle ** vehicle -> bool
+
+-- print vehicle
+FUN ` : vehicle -> denotation
+
+-- print status
+FUN ` : status -> denotation
+
+-- print job
+FUN ` : job -> denotation
+
+-- returns the total cost of all jobs in a given list
+FUN overallCost: seq[job] -> real
+
+-- returns a list of all jobs of a given status in a given list
+FUN searchJobs: seq[job] ** status -> seq[job]
+
+-- applies a discount to all jobs i a given list of jobs
+FUN discount : seq[job] -> seq[job]

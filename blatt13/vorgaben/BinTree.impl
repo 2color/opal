@@ -1,0 +1,6 @@
+IMPLEMENTATION BinTree[alpha]
+
+IMPORT Seq[alpha] COMPLETELY
+IMPORT Bool       COMPLETELY
+
+SORT alpha

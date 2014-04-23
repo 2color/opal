@@ -1,0 +1,44 @@
+IMPLEMENTATION HOF
+
+IMPORT Nat COMPLETELY
+
+
+DEF apply(f, g, x) == (f(x), g(x))
+
+
+DEF prodFun(f, a, b) == IF a > b THEN 1
+                        ELSE f(a) * prodFun(f, succ(a), b) FI
+
+
+-- Function composition
+DEF o(f, g) == \\ x. f(g(x))
+-- DEF o == \\ f, g. \\ x. f(g(x))
+
+
+-- Regular version of power
+FUN pow : nat ** nat -> nat
+DEF pow(x,y) == IF y = 0 THEN 1
+                ELSE x * pow(x,y-1)
+                FI
+
+-- Curried version of power
+FUN powL : nat -> nat -> nat
+DEF powL == \\ x. \\ y. IF y = 0 THEN 1
+                        ELSE x * pow(x,y-1)
+                        FI
+
+
+FUN mersenne : nat -> nat
+DEF mersenne == pred o (\\ p. pow(2, p))
+
+
+FUN mersenne2 : nat -> nat
+DEF mersenne2 == pred o powL(2)
+
+
+
+
+
+
+
+

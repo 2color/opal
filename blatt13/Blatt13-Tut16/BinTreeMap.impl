@@ -1,0 +1,8 @@
+IMPLEMENTATION BinTreeMap[alpha, beta]
+
+IMPORT BinTree[alpha]	COMPLETELY
+IMPORT BinTree[beta]	COMPLETELY
+
+
+DEF map(f)(nil)                    == nil
+DEF map(f)(node(val, left, right)) == node(f(val), map(f)(left), map(f)(right))

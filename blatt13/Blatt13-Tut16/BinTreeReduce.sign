@@ -1,0 +1,8 @@
+SIGNATURE BinTreeReduce[alpha, beta]
+
+IMPORT BinTree[alpha]	ONLY binTree
+
+SORT alpha
+SORT beta
+
+FUN reduce : (alpha ** beta ** beta -> beta) -> beta -> (binTree[alpha] -> beta)

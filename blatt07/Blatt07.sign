@@ -1,0 +1,24 @@
+SIGNATURE Blatt07
+
+IMPORT Nat COMPLETELY
+       University COMPLETELY
+       Seq[student] COMPLETELY
+       Seq[tutorial] COMPLETELY
+
+-- Tutorial Product Type (Produkttype) declaration
+TYPE tutorial == tutorial(subject : subject, tutnr : nat , teacher : teacher , students : seq[student])
+
+
+-- Tutorial Enumerated (Aufzählungstyp) Type declaration
+TYPE subject == MPGI1 TechGI1 LinA
+
+
+-- Average year of a single tutorial
+FUN averageYear : tutorial -> real
+
+-- Average year of a tutorial sequence
+FUN averageYear : seq[tutorial] -> real
+
+
+-- Test function testing both versions of averageYear
+FUN test : denotation

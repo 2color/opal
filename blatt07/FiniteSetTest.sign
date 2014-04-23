@@ -1,0 +1,12 @@
+SIGNATURE FiniteSetTest
+
+IMPORT Nat          COMPLETELY
+       NatConv      COMPLETELY
+       SeqConv      COMPLETELY
+       Denotation   COMPLETELY
+       BoolConv     COMPLETELY
+       OptionConv   COMPLETELY
+       FiniteSet[nat, ='Nat] COMPLETELY
+
+-- FUN test : finiteSet
+FUN test : denotation

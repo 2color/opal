@@ -1,0 +1,61 @@
+SIGNATURE Repairshop
+
+IMPORT Real ONLY real
+       Seq  ONLY seq
+       Nat  ONLY nat
+
+TYPE vehicle == car bike truck
+TYPE status == open inProgress finished
+TYPE job == job(object: vehicle, status: status, cost: real)
+
+-- Beispiel list zum Testen
+FUN joblist: seq[job]
+
+-- compare status and vehicle type
+FUN = : status ** status -> bool
+FUN = : vehicle ** vehicle -> bool
+
+-- print a sequence of vehicles
+FUN ` : seq[job] -> denotation
+
+-- print vehicle
+FUN ` : vehicle -> denotation
+
+-- print status
+FUN ` : status -> denotation
+
+-- print job
+FUN ` : job -> denotation
+
+-- returns the total cost of all jobs in a given list
+FUN overallCost: seq[job] -> real
+
+-- returns a list of all jobs of a given status in a given list
+FUN searchJobs: seq[job] ** status -> seq[job]
+
+-- applies a discount to all jobs i a given list of jobs
+FUN discount : seq[job] -> seq[job]
+
+
+-- returns all jobs that aren't finished for a given list of jobs
+FUN notFinished : seq[job] -> seq[job]
+
+-- returns all jobs that are in progress for a given list of jobs
+FUN inProgress : seq[job] -> seq[job]
+
+
+-- returns the jobs that pass the status descrimination test passed
+-- for a given list of jobs
+FUN filterStatus : seq[job] -> (status -> bool) -> seq[job]
+
+-- filters a list of jobs based on vehicle type ( bike )
+FUN filterVehicleType : seq[job] -> (vehicle -> bool) -> seq[job]
+
+-- calculates the aggregated cost of vehicle types that are in progress
+FUN costInProgress : seq[job] -> (real ** real ** real)
+
+-- advances the status of jobs in a list
+FUN advance : seq[job] ** bool -> seq[job]
+
+-- returns all jobs that are open for a given list of jobs
+FUN openJobs : seq[job] -> denotation

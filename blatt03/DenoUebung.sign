@@ -1,0 +1,8 @@
+SIGNATURE DenoUebung
+
+IMPORT Denotation ONLY denotation
+
+-- returns a denotation formed by attaching the second given denotation to the first
+FUN concat : denotation ** denotation -> denotation 
+
+FUN lowerFirst : denotation -> denotation 

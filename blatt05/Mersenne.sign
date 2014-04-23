@@ -1,0 +1,9 @@
+SIGNATURE Mersenne
+
+IMPORT Nat ONLY nat
+
+-- The funktion mersenne calculates the Mersenne number for every input "p"
+FUN mersenne: nat -> nat
+
+-- Die Funktion runTest generiert fuer jede Primzahl in einem Intervall [a, b] (a<=b) die zugehoerige Mersenne-Zahl und uberprueft, ob diese wiederum eine Primzahl ist. Die Ergebnisse werden zeilenweise in einer Zeichenkette ausgegeben.
+FUN runTest: nat ** nat -> denotation

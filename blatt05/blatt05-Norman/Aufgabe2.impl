@@ -1,0 +1,20 @@
+IMPLEMENTATION Aufgabe2
+
+IMPORT Nat COMPLETELY
+
+-- function overloading to avoid confusion
+FUN product : nat ** nat -> nat
+
+DEF product(n) == product(n,1)
+
+
+DEF product(n,acc) ==
+        IF n = 0 THEN acc
+        ELSE
+            product(n - 1, n * acc )
+        FI
+
+DEF digitSum(n) ==
+		IF n < 10 THEN n 
+		ELSE n mod 10 + digitSum(n/10)
+		FI

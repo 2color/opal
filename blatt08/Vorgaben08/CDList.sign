@@ -1,0 +1,13 @@
+SIGNATURE CDList
+
+IMPORT Seq        ONLY seq
+       Nat        ONLY nat
+       Denotation ONLY denotation
+
+-- TYPE is needed for the purpose of pattern matching
+-- Otherwise the SORT statement can be used
+TYPE cd == cd(name:denotation, artist:denotation, year:nat)
+
+FUN cdlist: seq[cd]
+
+FUN ` : cd -> denotation

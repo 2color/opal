@@ -1,0 +1,32 @@
+SIGNATURE PriorityQueue[entry, >=]
+
+SORT entry
+-- e1 >= e2 means: e1 has a higher priority than e2
+FUN >= : entry ** entry -> bool
+
+-- --------------------------------------------------------
+
+IMPORT	Option     ONLY option[entry]
+	Denotation ONLY denotation
+	Bool       ONLY bool
+-- --------------------------------------------------------
+
+SORT priorityQueue
+
+-- creates an empty queue
+FUN init : priorityQueue
+
+-- returns true iff the queue is empty
+FUN empty?: priorityQueue -> bool
+
+-- adds an element
+FUN enqueue : priorityQueue ** entry -> priorityQueue
+
+-- gets the element with the highest priority (if it exists)
+FUN dequeue : priorityQueue -> option[entry]
+
+-- removes the element with the highest priority, returns the remaining queue
+FUN pop : priorityQueue -> priorityQueue
+
+-- returns a denotation representation of the priority queue
+FUN ` : (entry -> denotation) -> priorityQueue -> denotation

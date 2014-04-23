@@ -1,0 +1,6 @@
+SIGNATURE Math
+
+IMPORT Real COMPLETELY
+
+FUN mul2: real -> real
+FUN spherePerimeter: real -> real	

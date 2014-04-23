@@ -1,0 +1,45 @@
+IMPLEMENTATION University
+
+IMPORT Nat COMPLETELY
+       Real COMPLETELY
+
+-- Produkttyp
+DATA student == student(matr: nat, year: nat, semester: nat)
+
+-- sort
+SORT student
+
+-- constructor
+FUN student : nat ** nat ** nat -> student
+
+-- selectors
+FUN matr year semester : student -> nat
+
+-- discriminators
+FUN student? : student -> bool
+
+
+-- Summentyp
+DATA teacher == tutor(hours: nat, euro: real)
+                wimi(hours: nat, euro: real, bonus: real)
+                prof(euro: real, fg: denotation)
+
+-- sort
+SORT teacher
+
+-- constructors
+FUN tutor : nat ** real -> teacher
+FUN wimi : nat ** real ** real -> teacher
+FUN prof : real ** denotation -> teacher
+
+-- selectors
+FUN hours : teacher -> nat
+FUN euro bonus : teacher -> real
+FUN fg : teacher -> denotation
+
+-- discriminators
+FUN tutor? wimi? prof? : teacher -> bool
+
+
+
+

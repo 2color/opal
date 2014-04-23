@@ -1,0 +1,19 @@
+SIGNATURE FiniteSet[entry, =]
+
+SORT entry
+SORT finiteSet
+
+
+FUN = : entry ** entry -> bool
+
+FUN {} : finiteSet
+
+FUN {}? : finiteSet -> bool
+
+FUN contains : finiteSet -> entry -> bool
+
+FUN << : finiteSet ** entry -> finiteSet
+
+FUN ` : (entry -> denotation) -> finiteSet -> denotation
+
+       

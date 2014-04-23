@@ -1,0 +1,18 @@
+SIGNATURE BinSearchTree[alpha,<]
+
+IMPORT BinTree[alpha] COMP:LETEL
+
+SORT alpha
+
+FUN < : alpha**alpha->bool
+
+
+-- when removing ( e.g. 32) leafs without children 
+-- and two navigation nodes are in a row, 
+-- one can be removed ( usually the smaller one? )
+
+-- when removing ( e.g. 10) navigation nodes with two children
+-- take the biggest element of the left leaf 
+-- ( go left as far as possible and pick the one on the right )
+-- 9
+-- and swap it with the node to be removed

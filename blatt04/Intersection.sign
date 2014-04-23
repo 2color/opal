@@ -1,0 +1,6 @@
+SIGNATURE Intersection
+
+IMPORT Real ONLY real
+
+
+FUN intersectionPoint : real ** real ** real ** real -> real ** real

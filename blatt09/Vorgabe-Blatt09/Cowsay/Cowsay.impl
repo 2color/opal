@@ -1,0 +1,56 @@
+IMPLEMENTATION Cowsay
+
+IMPORT Com COMPLETELY
+IMPORT Void ONLY nil void
+IMPORT ComCompose COMPLETELY
+IMPORT BasicIO COMPLETELY
+IMPORT ProcessArgs COMPLETELY
+IMPORT Nat COMPLETELY
+IMPORT Denotation COMPLETELY
+IMPORT File COMPLETELY
+IMPORT Void ONLY nil void
+
+
+DEF cowsay == 
+    argCount & (\\c.
+        IF (c = 1) THEN ask("What should Bob Sponge ( the mutated cow ) say? ") & art
+        IF (c = 2) THEN arg(1) & art
+        IF (c > 2) THEN writeLine("too many arguments my friend")
+        FI ) 
+
+
+FUN art : denotation -> com[void]
+DEF art(bubbleText) == 
+    writeLine(bob)          & (
+    open("cowsay.txt", "w")    & (\\ artFile.
+    write(artFile, bob)     & (
+    close(artFile)
+    )))
+    WHERE bob == 
+    "-----------------------------------------\n"   ++
+    "" ++ bubbleText                      ++ "\n"   ++
+    "-----------------------------------------\n"   ++
+    "                                        /\n"   ++
+    "                                       /\n"    ++
+    "      .--..--..--..--..--..--.        /\n"     ++
+    "    .' \\  (`._   (_)     _   \\       /\n"      ++
+    "  .'    |  '._)         (_)  |      /\n"       ++
+    "  \\ _.')\\      .----..---.   /     / \n"       ++
+    "  |(_.'  |    /    .-\\-.  \\  |    /\n"         ++
+    "  \\     0|    |   ( O| O) | o|   /\n"          ++
+    "   |  _  |  .--.____.'._.-.  |  /\n"           ++
+    "   \\ (_) | o         -` .-`  | / \n"           ++
+    "    |    \\   |`-._ _ _ _ _\\ /\n"               ++
+    "    \\    |   |  `. |_||_|   |\n"               ++
+    "    | o  |    \\_      \\     |     -.   .-.\n"  ++
+    "    |.-.  \\     `--..-'   O |     `.`-' .'\n"  ++
+    "  _.'  .' |     `-.-'      /-.__   ' .-'\n"    ++
+    ".' `-.` '.|='=.='=.='=.='=|._/_ `-'.'\n"       ++
+    "`-._  `.  |________/\\_____|    `-.'\n"         ++
+    "   .'   ).| '=' '='\\/ '=' |\n"                 ++
+    "   `._.`  '---------------'\n"                 ++
+    "           //___\\   //___\\\n"                  ++
+    "             ||       ||\n"                    ++
+    "             ||_.-.   ||_.-.\n"                ++
+    "            (_.--__) (_.--__)\n"
+

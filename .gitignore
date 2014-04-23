@@ -1,0 +1,10 @@
+/doc
+
+OCS
+
+*.sublime-project
+*.sublime-workspace
+
+.DS_Store
+
+sublime-opal/

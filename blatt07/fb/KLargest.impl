@@ -1,0 +1,34 @@
+IMPLEMENTATION KLargest
+
+IMPORT 	Nat COMPLETELY
+	Seq COMPLETELY
+	Bool COMPLETELY
+
+
+FUN klargest : seq[nat] ** nat -> nat
+DEF klargest(p::list,k) == LET left==small(p,list)
+                                right==large(p,list)
+                            IN
+                              IF ((#(right)+1)=k) THEN p
+                              ELSE 
+                                IF ((#(right)+1)>k) THEN klargest(right,k)
+                                ELSE klargest(left,k-((#(right))+1))
+                                FI
+                              FI
+
+-- Hilfefunktionen
+FUN small : nat ** seq[nat] -> seq[nat]
+DEF small(p,<>) == <>
+DEF small(p,a::A) == IF (a<p) THEN a::(small(p,A))
+                     ELSE small(p,A)
+                     FI
+
+FUN large : nat ** seq[nat] -> seq[nat]
+DEF large(p,<>) == <>
+DEF large(p,b::B) == IF (b>p) THEN b::(large(p,B))
+                     ELSE large(p,B)
+                     FI
+-- Zum Testen
+FUN testList : seq[nat]
+DEF testList == %(11,3,2,5,8,6,7,1)
+

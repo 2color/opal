@@ -1,0 +1,5 @@
+# SysDefs
+TOPSTRUCT=Blatt10
+TOPCOM=viewer
+
+OPAL_LIBS += $(OPAL_WIN)

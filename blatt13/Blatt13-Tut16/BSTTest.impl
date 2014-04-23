@@ -1,0 +1,9 @@
+IMPLEMENTATION BSTTest
+
+IMPORT Nat                  COMPLETELY
+IMPORT BinSearchTree[nat,<] COMPLETELY
+IMPORT NatConv              ONLY `
+IMPORT PrintTree[nat]       COMPLETELY
+
+
+DEF exampleTree == 9 insert 2 insert 6 insert 17 insert ("76"!) insert 32 insert 29 insert 24 insert ("63"!) insert ("54"!) insert 10 insert 31 insert nil

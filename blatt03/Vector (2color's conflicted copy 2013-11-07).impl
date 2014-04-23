@@ -1,0 +1,18 @@
+IMPLEMENTATION Vector
+
+IMPORT Real COMPLETELY
+
+DEF add(x1, y1, x2, y2) == ( x1 + x2, y1 + y2 )
+
+-- Defined as (x1,y1) - (x2,y2)
+DEF sub(x1, y1, x2, y2) == ( x1 - x2, y1 - y2 )
+
+DEF mult(x1, y1, x2, y2) ==  x1 * x2 + y1 * y2
+
+DEF mult(s, x, y) ==  (s*x , s*y)
+
+DEF abs(x, y) == sqrt(mult(x, y, x, y))
+
+-- The result is converted from radians to degrees
+DEF angle(x1, y1, x2, y2) == deg(arccos( mult(x1, y1, x2, y2) / ( abs(x1, y1) * abs(x2, y2) ) ) )
+

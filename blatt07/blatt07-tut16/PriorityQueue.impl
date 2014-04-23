@@ -1,0 +1,52 @@
+IMPLEMENTATION PriorityQueue[entry, >=]
+
+IMPORT Seq        COMPLETELY
+       SeqConv    COMPLETELY
+       Option     COMPLETELY
+       Denotation COMPLETELY
+
+
+DATA priorityQueue == prio(content : seq[entry])
+
+
+FUN ` : (entry -> denotation) -> priorityQueue -> denotation
+DEF `(eToD)(queue) == IF empty?(queue) THEN ""
+                      ELSE LET head == ft(content(queue))
+                               rest == rt(content(queue))
+                           IN +/+(" >= ") (eToD(head), `(eToD)(prio(rest)))
+                      FI
+
+
+
+DEF init == prio(<>)
+
+
+DEF empty?(queue) == <>?(content(queue))
+-- DEF empty? == <>? o content
+
+-- -------------------------------------------------------------
+
+DEF enqueue(queue, e) == IF empty?(queue) THEN prio(e :: <>)
+                         ELSE LET head == ft(content(queue))
+                                  rest == rt(content(queue))
+                              IN IF head >= e
+                                 THEN prio(head :: content(enqueue(prio(rest), e)))
+                                 ELSE prio(e :: head :: rest)
+                                 FI
+                         FI
+
+
+DEF dequeue(queue) == IF empty?(queue) THEN nil
+                      ELSE avail(ft(content(queue)))
+                      FI
+
+
+DEF pop(queue) == IF empty?(queue) THEN prio(<>)
+                  ELSE prio(rt(content(queue)))
+                  FI
+
+
+
+
+
+

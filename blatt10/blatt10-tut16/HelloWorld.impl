@@ -1,0 +1,127 @@
+IMPLEMENTATION HelloWorld
+
+IMPORT BasicIO    COMPLETELY
+       Com        COMPLETELY
+       ComCompose COMPLETELY
+       Denotation COMPLETELY
+       Nat        COMPLETELY
+       NatConv    COMPLETELY
+       Real       COMPLETELY
+       Seq        COMPLETELY
+       SeqMap     COMPLETELY
+       SeqReduce  COMPLETELY
+       SeqZip     COMPLETELY
+       Void       COMPLETELY
+
+IMPORT ProcessArgs     COMPLETELY
+       WinButton       COMPLETELY
+       WinCanvas       COMPLETELY
+       WinCanvasEditor COMPLETELY
+       WinConfig       COMPLETELY
+       WinEmitter      COMPLETELY
+       WinWindow       COMPLETELY
+       WinView         COMPLETELY
+
+
+-- Elements which will be used througout the application are stored in a
+-- separate data structure.
+DATA gui == gui(edit  : canvasEditor,
+                emit  : emitter[action],
+                title : denotation)
+
+-- Events
+DATA action == hello exit
+
+
+-- ---------------------------------------------------------------------
+-- Main function
+-- ---------------------------------------------------------------------
+
+DEF helloWorld == initialize       & (\\gui.
+                  setupWindow(gui) & (\\win.
+--                  drawHello(gui)   &  -- without the hello emitter you can drawHello while initializing
+                  handleEmits(gui, win)))
+
+-- ---------------------------------------------------------------------
+-- Setup of window
+-- ---------------------------------------------------------------------
+
+FUN initialize : com[gui]
+DEF initialize == canvasEditor          & (\\edit.        -- create canvas editor
+                  emitter               & (\\emit.        -- create emitter
+                  succeed(gui(edit, emit, "Hello world example"))))
+                                                          -- edit and emit are stored in
+                                                          -- gui to work with them later
+
+FUN setupWindow : gui -> com[window]
+DEF setupWindow(g) == window(frame(g))               & (\\ win.  -- create window based on the root view 'frame'
+                      set(win, titleName(title(g)))  & (
+                      grab(win)                      &
+                      succeed(win)))
+
+
+-- ---------------------------------------------------------------------
+-- Main program
+-- ---------------------------------------------------------------------
+
+FUN drawHello : gui -> com[void]
+DEF drawHello(g) ==
+    display(edit(g), helloDrawing)
+
+
+FUN helloDrawing : drawing
+DEF helloDrawing ==
+    text(16 @ 32)             -- position
+    with text("Hello world!") -- caption
+
+
+FUN handleEmits : gui ** window -> com[void]
+DEF handleEmits(g, win) ==
+    await(emit(g)) & (\\ act .
+    IF act hello? THEN drawHello(g) &
+                       handleEmits(g, win)
+    IF act exit? THEN release(win) &
+                      delete(win) &
+                      exit(0)
+    FI)
+
+
+-- ---------------------------------------------------------------------
+-- The layout (views)
+-- ---------------------------------------------------------------------
+
+FUN frame : gui -> view           -- The 'root' view. Composition of other views.
+DEF frame(g) == pad(edit(g))
+                ^^                -- ^^ means 'over'
+                (helloButton(emit(g)) <<    -- << means 'left of'
+                 exitButton(emit(g)))
+
+
+FUN pad : canvasEditor -> view              -- gets canvasEditor, returns a fine canvas
+DEF pad(editor) == canvas with (size(canvasSize)
+                                ++ edit(editor)
+                                ++ background(grey))
+
+
+FUN exitButton helloButton : emitter[action] -> view
+DEF exitButton(emit) == button with (bind(emit, exit) ++ text("Exit"))
+
+DEF helloButton(emit) == button with (bind(emit, hello) ++ text("Hello!"))
+
+-- ---------------------------------------------------------------------
+-- Basic settings
+-- ---------------------------------------------------------------------
+
+FUN canvasWidth canvasHeight : real
+DEF canvasWidth == "320" px
+DEF canvasHeight == "240" px
+
+FUN canvasSize : size
+DEF canvasSize == canvasWidth x canvasHeight
+
+FUN margin top bottom left right : real
+DEF margin == "10" px
+DEF top == margin
+DEF bottom == canvasHeight - margin
+DEF left == margin
+DEF right == canvasWidth - margin

@@ -1,0 +1,9 @@
+SIGNATURE Prim
+
+IMPORT Nat ONLY nat
+
+
+-- Testet ob eine Zahl eine Primzahl ist
+FUN prim: nat -> bool
+
+

@@ -1,0 +1,18 @@
+IMPLEMENTATION HOF
+
+IMPORT Nat ONLY nat
+
+DEF apply(f, g, x) == (f(x), g(x))
+
+-- succ returns the following natural number e.g. succ(1) = 2
+DEF prodFun(f, a, b) == IF a > b THEN 1
+                        ELSE 
+                            f(a) * prodFun(f, succ(a), b)
+                        FI
+
+-- function composition of f and g
+DEF o(f,g) == \\ x. f(g(x))
+
+
+
+

@@ -1,0 +1,7 @@
+SIGNATURE Aufgabe04
+
+IMPORT Real COMPLETELY
+
+FUN sort: real ** real ** real -> real ** real ** real
+
+FUN intersectionPoint : (real**real)**(real**real)**(real**real)**(real**real) -> real ** real

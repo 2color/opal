@@ -1,0 +1,39 @@
+IMPLEMENTATION TreeTest
+
+IMPORT Nat		COMPLETELY
+IMPORT Seq[nat]      	COMPLETELY
+IMPORT BinTree[nat]	COMPLETELY
+IMPORT Denotation ONLY ++
+IMPORT NatConv ONLY `
+IMPORT PrintTree[nat] COMPLETELY
+
+
+DEF exampleTree ==
+        node("30"!,
+		node("56"!,
+			node("99"!,
+				nil,
+				nil
+			),
+			node("8"!,
+				node("2"!,
+					nil,
+					nil
+				),
+				nil
+			)
+		),
+		node("13"!,
+			node("62"!,
+				nil,
+				node("1"!,
+					nil,
+					nil
+				)
+			),
+			node("80"!,
+				nil,
+				nil
+			)
+		)
+	)

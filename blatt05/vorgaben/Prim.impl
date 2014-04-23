@@ -1,0 +1,28 @@
+IMPLEMENTATION Prim
+
+IMPORT Nat  COMPLETELY
+IMPORT Real COMPLETELY
+IMPORT NatConv ONLY  asReal
+IMPORT RealConv ONLY asNat
+
+
+DEF prim == \\n.
+      IF n = 0 THEN false
+      IF n = 1 THEN false
+      IF n = 2 THEN true
+      IF even?(n) and n |= 2 THEN false
+      IF odd?(n)  and n  > 2 THEN noOddDivisors(n,3)
+      FI
+
+-- noOddDivisors berechnet, ob n durch keine Zahl
+-- zwischen t und und n-1 (einschliesslich der beiden) teilbar ist.
+FUN noOddDivisors : nat ** nat -> bool
+
+DEF noOddDivisors == \\n, t.
+      IF t > asNat(sqrt(asReal(n)))
+            THEN true
+            ELSE IF (n%t) = 0 THEN false
+                              ELSE noOddDivisors(n,t+2)
+            FI
+      FI
+

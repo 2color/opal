@@ -1,0 +1,36 @@
+IMPLEMENTATION Blatt06
+
+IMPORT Denotation COMPLETELY
+       Char COMPLETELY
+       Nat COMPLETELY
+
+-- applyToChunk
+-- @param text  text to update ( apply the function on to)
+-- @param f     function to call on the text 
+-- @param a     starting point from which to apply the function
+-- @param b     function to call on the text 
+DEF applyToChunk(text, f, a, b) ==
+    IF a <= b THEN upd(a, f(!(text,a)), applyToChunk(text, f, a+1, b))
+    ELSE text
+    FI
+
+-- Dach - compose a function a given number of times
+-- @param f     function to compose
+-- @param n     number of times to compose with it's self
+-- @param x     the argument for the closure
+DEF ^(f, n)(x) ==  IF n = 0 THEN x
+                    ELSE ^(f,n - 1)(f(x))
+                    FI
+-- specCombine - compose two different functions a number of times 
+--               and together
+-- @param f1    first function to compose
+-- @param m     number of times to compose the first function
+-- @param f2    second function to compose
+-- @param n     number of times to compose the second function
+-- @param x     the argument for the created closure
+DEF specCombine(f1,m)(f2,n)(x) == (f1^m)((f2^n)(x)) 
+
+
+-- NOTE
+-- I would have really loved to do the last task but due to work and other commitments 
+-- I couldn't really find the time to have a look at it yet.

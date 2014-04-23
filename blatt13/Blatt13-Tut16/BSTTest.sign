@@ -1,0 +1,9 @@
+SIGNATURE BSTTest
+
+IMPORT Nat                  ONLY nat < 
+IMPORT BinSearchTree[nat,<] ONLY binTree
+IMPORT PrintTree[nat]       ONLY `
+IMPORT NatConv              ONLY `
+
+
+FUN exampleTree : binTree[nat]

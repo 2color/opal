@@ -1,0 +1,18 @@
+IMPLEMENTATION LeapYear
+--Tutorium12.11.2013
+
+IMPORT Nat COMPLETELY
+
+
+DEF leap?(year) ==  IF ((year % "400"!) = 0) THEN true
+                    ELSE  IF ((year % 100) = 0) THEN false
+                          ELSE IF ((year % 4) = 0) THEN true
+                              ELSE false FI
+                          FI
+                    FI
+
+DEF leapDijkstra?(year) ==  IF((year % ("400"!)) = 0 ) THEN true
+                            IF((year % ("400"!)) |= 0 ) and ((year % 100) = 0) THEN false
+                            IF((year % 100) |= 0) and ((year % 4) = 0) THEN true
+                            IF((year%4) |= 0) THEN false
+                            FI

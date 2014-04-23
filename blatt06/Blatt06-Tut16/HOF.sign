@@ -1,0 +1,12 @@
+SIGNATURE HOF
+
+IMPORT Nat ONLY nat
+
+
+FUN apply : (nat -> nat) ** (nat -> nat) ** nat -> (nat ** nat)
+
+
+FUN prodFun : (nat -> nat) ** nat ** nat -> nat
+
+
+FUN o : (nat -> nat) ** (nat -> nat) -> (nat -> nat)

@@ -1,0 +1,8 @@
+IMPLEMENTATION Fib
+
+IMPORT Nat COMPLETELY
+
+FUN fib: nat -> nat
+DEF fib(0)       == 0
+DEF fib(succ(0)) == 1
+DEF fib(n)       == fib(n-1) + fib(n-2)

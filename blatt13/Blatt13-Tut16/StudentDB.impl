@@ -1,0 +1,42 @@
+IMPLEMENTATION StudentDB
+
+IMPORT Nat                      COMPLETELY
+       Real                     COMPLETELY
+       BinSearchTree[student,<] COMPLETELY
+       BinTree[student]	        COMPLETELY
+       Seq[student]             COMPLETELY
+       NatConv                  ONLY `
+       Denotation               COMPLETELY
+
+-- datatypes
+DATA student == student(matric: nat, name:denotation, surname: denotation, sex:sex)
+DATA sex == m f
+
+-- studentList in chronological order according to the Matr. Nr.
+DEF studentList(nil) == <>
+DEF studentList(node(s, l, r)) == inorder(node(s, l, r))
+
+
+-- order
+DEF student(id1, _, _, _) < student(id2, _, _, _) == id1 < id2
+
+-- backtick function for students
+DEF `(student(matr, name, sname, s)) == name ++ ", " ++ sname ++ "  Matr.Nr.: " ++ `(matr) ++ " sex: " ++ `(s) ++ "\n"
+
+FUN ` : sex -> denotation
+DEF `(m) == "male"
+DEF `(f) == "female"
+
+
+FUN student1 student2 student3 student4 student5 student6 student7 student8 student9 : student
+DEF student1 == student("362"!, "Daniel","Norman", m)
+DEF student2 == student("163"!, "Ofir", "Edelstein", m)
+DEF student3 == student("742"!, "Arik", "Weinstock", m)
+DEF student4 == student("645"!, "Jessica", "Ezra", f)
+DEF student5 == student("478"!, "Wolf", "Bergman", m)
+DEF student6 == student("864"!, "Micky", "Hendler", f)
+DEF student7 == student("120"!, "Wah", "Wo", m)
+DEF student8 == student("502"!, "Rod", "Norman", m)
+DEF student9 == student("999"!, "Anat", "Norman", f)
+
+DEF studentTree == student1 insert student2 insert student3 insert student4 insert student5 insert student6 insert student7 insert student8 insert student9 insert nil

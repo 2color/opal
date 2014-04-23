@@ -1,0 +1,7 @@
+SIGNATURE Aufgabe05
+
+IMPORT Nat COMPLETELY
+
+FUN product : nat -> nat
+
+--FUN digitSum : 

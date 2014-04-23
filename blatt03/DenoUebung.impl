@@ -1,0 +1,11 @@
+IMPLEMENTATION DenoUebung
+
+IMPORT Denotation COMPLETELY
+IMPORT Char COMPLETELY
+IMPORT Nat COMPLETELY
+
+-- returns a denotation formed by attaching the second given denotation to the first
+-- DEF concat(d1,d2) == d1 ++ d2
+DEF concat(d1,d2) == ++(d1,d2)
+
+DEF lowerFirst(d) == upd(0, lower(d ! 0),d)

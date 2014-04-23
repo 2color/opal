@@ -1,0 +1,23 @@
+IMPLEMENTATION FiniteSetTest
+
+-- -------------------------------------------------
+
+IMPORT Nat          COMPLETELY
+       NatConv      COMPLETELY
+       SeqConv      COMPLETELY
+       Denotation   COMPLETELY
+       BoolConv     COMPLETELY
+       OptionConv   COMPLETELY
+       FiniteSet[nat, ='Nat] COMPLETELY
+
+
+-- DEF test == contains( testFiniteSet << 6 << 7 , 3 )
+DEF test == "The following function test all the functions in the FiniteSet Module: \n" ++
+    "testFiniteSet                                : " ++ `(`'NatConv)(testFiniteSet) ++ "\n" ++
+    "`(`'NatConv)(testFiniteSet << 6 << 7) returns: " ++  `(`'NatConv)(testFiniteSet << 6 << 7) ++ "\n" ++
+    "`(contains(testFiniteSet, 3 )         returns: " ++  `(contains(testFiniteSet)(3)) ++ "\n" ++
+    "`({}?(testFiniteSet)                  returns: " ++  `({}?(testFiniteSet))
+
+
+FUN testFiniteSet : finiteSet
+DEF testFiniteSet == {} << 1 << 2 << 3 << 4 << 5

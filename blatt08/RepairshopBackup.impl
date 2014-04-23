@@ -1,0 +1,128 @@
+IMPLEMENTATION Repairshop
+
+IMPORT	Nat        COMPLETELY
+	NatConv    COMPLETELY
+	Real       COMPLETELY
+	RealConv   COMPLETELY
+	Denotation COMPLETELY
+	Seq        COMPLETELY
+	SeqConv    COMPLETELY
+	Char	   ONLY newline
+	CharConv   ONLY `
+	SeqFilter  ONLY filter
+	SeqReduce  ONLY reduce
+	SeqMap     ONLY map	
+	Bool       ONLY not
+    Compose    COMPLETELY
+
+
+DATA vehicle == car bike truck
+DATA status == open inProgress finished
+DATA job == job(object: vehicle, status: status, cost: real)
+
+
+-- Example list for testing
+DEF joblist ==  job(bike, open, "200"!)
+            :: (job(car, open, "4200"!)
+            :: (job(car, inProgress, "4711"!)
+            :: (job(car, finished, "9988"!)
+            :: (job(bike, inProgress, "815"!)
+            :: (job(truck, open, "42"!)
+            :: (job(truck, inProgress, "2000"!)
+            :: (<>)))))))
+
+
+DEF = (a, b) == IF open?(a) and open?(b) THEN true
+                IF inProgress?(a) and inProgress?(b) THEN true
+	        IF finished?(a) and finished?(b) THEN true
+                ELSE false
+                FI
+
+-- "=" to compare vehicles
+-- Annotieren ist hier wichtig, da es eine andere "=" ist-gleich-Funktion in dieser Struktur gibt. 
+DEF car   : vehicle = car   == true
+DEF bike  : vehicle = bike  == true
+DEF truck : vehicle = truck == true
+DEF   _   : vehicle =  _    == false
+
+
+DEF ` (car)   == "Car"
+DEF ` (bike)  == "Bike"
+DEF ` (truck) == "Truck"
+
+DEF `(open)       == "open"
+DEF `(inProgress) == "in progress"
+DEF `(finished)   == "finished"
+
+DEF `(j) == "Vehicle: " ++ `(object(j)) ++ 
+			", Status: " ++ `(status(j)) ++ 
+			", Cost: " ++ ``(cost(j)) ++ "\n"
+
+DEF `(<>) == ""
+DEF `(jobs) == `(ft(jobs)) ++ `(rt(jobs))
+
+-- searchJobs
+FUN searchJobs : seq[job] ** status -> seq[job]
+DEF searchJobs(jobs, s) == filter(\\ j. status(j) = s, jobs)
+
+-- Overall cost
+FUN overallCost : seq[job] -> real
+DEF overallCost(jobs) == reduce(+,0)(map(cost)(jobs))
+
+-- the beauty of currying
+-- DEF overallCost(jobs) == reduce(+,0) o map(cost)
+
+FUN discount : seq[job] -> seq[job]
+DEF discount(jobs)  == 
+    map(disc, jobs)
+    WHERE 
+        disc == \\j. job(object(j), status(j), cost(j) * ("0.75"!) )
+
+
+
+DEF notFinished(jobs) == filter(\\ j. finished?(status(j)) = false , jobs)
+
+DEF inProgress(jobs) == filterStatus(jobs)(inProgress?)
+
+
+
+DEF filterStatus(jobs)(desc) == filter(\\ j. desc(status(j)) , jobs)
+
+
+DEF filterVehicleType(jobs)(desc) == filter(\\j. desc(object(j)), jobs )
+
+
+DEF costInProgress(jobs) == 
+    (reduce(+,0)(map(cost,filterVehicleType(jobsInProgress)(car?))), 
+    reduce(+,0)(map(cost,filterVehicleType(jobsInProgress)(bike?))), 
+    reduce(+,0)(map(cost,filterVehicleType(jobsInProgress)(truck?))))
+    WHERE
+        jobsInProgress == inProgress(jobs)
+
+
+
+DEF advance(jobs, false) ==  map(setInProgress, jobsOpen) ++ map(setFinished, jobsInProgress) ++ jobsFinished
+    WHERE
+        setInProgress == \\j. job(object(j), inProgress, cost(j) )
+        setFinished   == \\j. job(object(j), finished, cost(j) )
+        jobsFinished == filterStatus(jobs)(finished?)
+        jobsInProgress == filterStatus(jobs)(inProgress?)
+        jobsOpen == filterStatus(jobs)(open?)
+
+
+DEF advance(jobs, true) ==  map(setInProgress, jobsOpen) ++ map(setFinished, jobsInProgress)
+    WHERE
+        setInProgress == \\j. job(object(j), inProgress, cost(j) )
+        setFinished   == \\j. job(object(j), finished, cost(j) )
+        jobsFinished == filterStatus(jobs)(finished?)
+        jobsInProgress == filterStatus(jobs)(inProgress?)
+        jobsOpen == filterStatus(jobs)(open?)
+
+
+DEF openJobs(jobs) == reduce(++, "")(map(backTick, jobsOpen))
+    WHERE 
+        jobsOpen == filterStatus(jobs)(open?)
+
+-- help function converting a job to denotation with specific information
+FUN backTick : job -> denotation
+DEF backTick(j) == "Vehicle: " ++ `(object(j)) ++ ", Cost: " ++ ``(cost(j),2) ++ "\n"

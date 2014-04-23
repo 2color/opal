@@ -1,0 +1,13 @@
+SIGNATURE Blatt06
+
+IMPORT  Denotation ONLY denotation
+        Char ONLY char
+        Nat ONLY nat
+
+
+FUN applyToChunk : denotation ** ( char -> char ) ** nat ** nat -> denotation
+
+FUN ^ : (nat -> nat) ** nat -> (nat -> nat)
+
+FUN specCombine : (nat -> nat) ** nat -> (nat -> nat) ** nat -> (nat -> nat)
+

@@ -1,0 +1,5 @@
+SIGNATURE ModuleA
+
+IMPORT Denotation ONLY denotation
+
+FUN a : denotation

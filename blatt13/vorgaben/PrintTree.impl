@@ -1,0 +1,15 @@
+IMPLEMENTATION PrintTree[alpha]
+
+IMPORT Tree[alpha]    COMPLETELY
+       TreeConv	      COMPLETELY
+       BinTree[alpha] COMPLETELY
+			
+
+SORT alpha
+
+DEF `(alphaToDenotation)(bTree) == graphic(alphaToDenotation)(treeTrans(bTree))
+
+
+FUN treeTrans : binTree[alpha] -> tree[alpha]
+DEF treeTrans(nil) == nil
+DEF treeTrans(node(data, left, right)) == node(data, treeTrans(left), treeTrans(right))

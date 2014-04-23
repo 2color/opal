@@ -1,0 +1,5 @@
+SIGNATURE HelloWorld
+
+IMPORT DENOTATION COMPLETELY
+
+FUN sayHello: denotation

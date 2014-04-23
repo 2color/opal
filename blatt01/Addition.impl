@@ -1,0 +1,6 @@
+IMPLEMENTATION Addition
+
+IMPORT Nat COMPLETELY
+
+FUN sum: nat ** nat -> nat
+DEF sum == \\x,y. x+y

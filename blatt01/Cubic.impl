@@ -1,0 +1,5 @@
+IMPLEMENTATION Cubic
+
+IMPORT Nat COMPLETELY
+
+DEF cubic == \\x. x^3

@@ -1,0 +1,84 @@
+IMPLEMENTATION Repairshop
+
+IMPORT	Nat        COMPLETELY
+	NatConv    COMPLETELY
+	Real       COMPLETELY
+	RealConv   COMPLETELY
+	Denotation COMPLETELY
+	Seq        COMPLETELY
+	SeqConv    COMPLETELY
+	Char	   ONLY newline
+	CharConv   ONLY `
+	SeqFilter  ONLY filter
+	SeqReduce  ONLY reduce
+	SeqMap     ONLY map	
+	Bool       ONLY not
+        Compose    ONLY o
+
+
+DATA vehicle == car bike truck
+DATA status == open inProgress finished
+DATA job == job(object: vehicle, status: status, cost: real)
+
+
+-- Example list for testing
+DEF joblist ==  job(bike, open, "200"!)
+            :: (job(car, open, "4200"!)
+            :: (job(car, inProgress, "4711"!)
+            :: (job(car, finished, "1000"!)
+            :: (job(bike, inProgress, "815"!)
+            :: (job(truck, open, "42"!)
+            :: (<>))))))
+
+
+DEF = (a, b) == IF open?(a) and open?(b) THEN true
+                IF inProgress?(a) and inProgress?(b) THEN true
+	        IF finished?(a) and finished?(b) THEN true
+                ELSE false
+                FI
+
+-- "=" to compare vehicles
+-- Annotieren ist hier wichtig, da es eine andere "=" ist-gleich-Funktion in dieser Struktur gibt. 
+DEF car   : vehicle = car   == true
+DEF bike  : vehicle = bike  == true
+DEF truck : vehicle = truck == true
+DEF   _   : vehicle =  _    == false
+
+
+DEF ` (car)   == "Car"
+DEF ` (bike)  == "Bike"
+DEF ` (truck) == "Truck"
+
+DEF `(open)       == "open"
+DEF `(inProgress) == "in progress"
+DEF `(finished)   == "finished"
+
+DEF `(j) == "Vehicle: " ++ `(object(j)) ++ 
+			", Status: " ++ `(status(j)) ++ 
+			", Cost: " ++ ``(cost(j)) ++ "\n"
+
+-- searchJobs
+FUN searchJobs : seq[job] ** status -> seq[job]
+DEF searchJobs(jobs, s) == filter(\\ j. status(j) = s, jobs)
+
+-- Overall cost
+FUN overallCost : seq[job] -> real
+DEF overallCost(jobs) == reduce(+,0)(map(cost)(jobs))
+-- DEF overallCost == reduce(+,0) o map(cost)
+
+-- discount
+DEF discount(jobs) == map(disc, jobs)
+    WHERE
+      disc == \\ j. job(object(j), status(j), cost(j) * ("0.75"!))
+
+-- notFinished
+-- TODO HA
+
+-- costInProgress
+-- TODO HA
+
+-- advance
+-- TODO HA
+
+-- openJobs
+-- TODO HA

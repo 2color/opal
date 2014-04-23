@@ -1,0 +1,5 @@
+IMPLEMENTATION HelloWorld
+
+IMPORT BasicIO COMPLETELY
+
+DEF helloWorld == writeLine("Hello World")

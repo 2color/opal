@@ -1,0 +1,64 @@
+IMPLEMENTATION EinAusgabe
+
+-- fuer die Nutzung von Kommandos
+IMPORT Com COMPLETELY
+IMPORT ComCompose COMPLETELY
+-- fuer ask und writeLine (auf Konsole)
+IMPORT BasicIO COMPLETELY
+IMPORT Nat COMPLETELY
+IMPORT NatConv ONLY `
+IMPORT Seq COMPLETELY
+IMPORT SeqReduce COMPLETELY
+IMPORT Denotation COMPLETELY
+-- fuer das Arbeiten mit Dateien
+IMPORT File COMPLETELY
+-- fuer die Hausaufgabe 
+-- (je nach Implementierung nicht unbedingt notwendig
+-- aber vielleicht hilfreich)
+IMPORT Void ONLY nil void
+IMPORT String COMPLETELY
+IMPORT StringConv ONLY !
+
+
+FUN helloWorld : com[void]
+DEF helloWorld == writeLine("Hello World")
+
+FUN greetUser : com[void]
+DEF greetUser == ask("Name: ") & (\\ name. 
+                 writeLine("Hello" ++ name))
+
+FUN doubleNat : com[void]
+DEF doubleNat == ask("Number: ") & (\\ n.
+                 writeLine(2*n))
+
+
+FUN readFile : com[void]
+DEF readFile == ask("File name: ")       & (\\ fileName .
+                ask("Line numbers: ")    & (\\ lineNumbers .
+                open(fileName, "r")      & (\\ fileHandle .
+                readAndPrintLines(fileHandle, lineNumbers) &
+                close(fileHandle))))
+
+FUN readAndPrintLines : file ** nat -> com[void]
+DEF readAndPrintLines(_, 0) == succeed(nil)
+DEF readAndPrintLines(fileHandle, n) == readLine(fileHandle) & (\\ line .
+                                        writeLine(line!) &
+                                        readAndPrintLines(fileHandle, n-1))
+
+
+
+
+           
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,10 @@
+SIGNATURE Wct
+
+IMPORT Real ONLY real
+
+FUN wct : real ** real -> real
+
+FUN zin : real ** real ** real -> real
+
+FUN sparkasse : real ** real ** real ** real -> real
+

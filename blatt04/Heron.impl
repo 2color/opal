@@ -1,0 +1,13 @@
+IMPLEMENTATION Heron
+
+
+IMPORT Real COMPLETELY
+
+
+DEF heron(a,b,c) == LET s == (a + b + c)/2
+                    IN sqrt(s * (s - a) * (s - b) * (s - c))
+
+-- Sometimes brackets are needed around a WHERE
+DEF heron(a,b,c) == sqrt(s * (s - a) * (s - b) * (s - c))
+                    WHERE
+                      s == (a + b + c)/2

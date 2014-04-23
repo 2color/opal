@@ -1,0 +1,31 @@
+SIGNATURE PatternMatching[entry, >=]
+
+-- Parametrisierung
+SORT entry
+-- Vergleicht zwei potenzielle Einträge
+-- bezüglich ihrer Priorität
+FUN >= : entry ** entry -> bool
+
+
+IMPORT Option	ONLY option[entry]
+IMPORT Nat	ONLY nat
+
+SORT priorityQueue
+
+-- Erstellt neue Queue
+FUN init : priorityQueue
+
+FUN # : priorityQueue -> nat
+
+-- Fügt ein Element ein
+FUN enqueue : priorityQueue ** entry -> priorityQueue
+
+-- Holt das "wichtigste" Element aus der Liste, also dasjengie e,
+-- für das gilt, dass jedes e2 <= e, und gibt avail(e) aus.
+-- nil bei leerer Liste.
+FUN dequeue : priorityQueue -> option[entry]
+
+-- Entfernt das wichtigste Element aus der Liste und gibt die
+FUN pop : priorityQueue -> priorityQueue
+
+FUN ` : (entry -> denotation) -> priorityQueue -> denotation

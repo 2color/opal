@@ -1,0 +1,6 @@
+SIGNATURE Cowsay
+
+IMPORT Com  ONLY com
+       Void ONLY void
+		
+FUN cowsay : com[void]

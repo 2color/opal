@@ -1,0 +1,6 @@
+SIGNATURE HelloWorld
+
+IMPORT 	Com 	ONLY com
+		Void 	ONLY void 
+
+FUN helloWorld : com[void]

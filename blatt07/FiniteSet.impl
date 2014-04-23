@@ -1,0 +1,33 @@
+IMPLEMENTATION FiniteSet[entry, =]
+
+IMPORT Seq        COMPLETELY
+       SeqConv    COMPLETELY
+       Option     COMPLETELY
+       Denotation COMPLETELY
+       Nat        COMPLETELY
+
+DATA finiteSet == finiteSet(content : seq[entry])
+
+DEF {} == finiteSet(<>)
+
+DEF {}?(set) == <>?(content(set))
+
+-- FUN exist?  : (data -> bool) ** seq -> bool
+DEF contains(set)(element) == exist?(\\x. x = element ,content(set))
+
+DEF <<(set,element) == 
+    IF contains(set)(element) THEN set
+    ELSE finiteSet( element :: (content(set))  )
+    FI
+
+DEF `(conv)(set) == "{" ++ convHelper(conv)(set)
+
+FUN convHelper : (entry -> denotation) -> finiteSet -> denotation
+
+DEF convHelper(conv)(set) == 
+        IF {}?(set) THEN "}"
+        ELSE 
+            IF #(content(set)) > 1 THEN conv(ft(content(set))) ++ "," ++ convHelper(conv)(finiteSet(rt(content(set))))
+            ELSE conv(ft(content(set))) ++ convHelper(conv)(finiteSet(rt(content(set))))
+            FI
+        FI

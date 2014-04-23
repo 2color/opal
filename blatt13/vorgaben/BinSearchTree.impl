@@ -1,0 +1,20 @@
+IMPLEMENTATION BinSearchTree[alpha,<]
+IMPORT Bool           COMPLETELY
+IMPORT BinTree[alpha] COMPLETELY
+IMPORT Option[alpha]  COMPLETELY
+
+
+-- operations for dataorder
+FUN > : alpha**alpha -> bool
+DEF d1 > d2 == d2 < d1
+
+
+FUN = : alpha**alpha -> bool
+DEF  d1 = d2 == not(d1 > d2) and not(d2 > d1) 
+
+FUN findBiggest: binTree[alpha] -> alpha
+DEF findBiggest(node(d,l,r)) ==
+	    IF (nil?(r)) THEN d
+	    ELSE findBiggest(r)
+	    FI
+

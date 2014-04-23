@@ -1,0 +1,18 @@
+IMPLEMENTATION Blatt03
+
+IMPORT Denotation COMPLETELY
+IMPORT Nat COMPLETELY
+
+DEF splitHalf(d) == 
+    -- when the number of characters is even simply split in the middle
+    --Initially I used mod(#(d),2) = 0 to determine if the denotation is even..
+    --Then I realised that Opal is so amazing and offers the even? function
+    IF even?(#(d)) THEN (slice(d, 0, #(d)/2 -1), slice(d, #(d) / 2 , #(d)) )
+    -- when the number of characters is odd make the first element of the tupel
+    -- a character longer. This implementation gurantees consistent behaviour.
+    -- 
+    ELSE (slice(d, 0, #(d)/2), slice(d, #(d) / 2 + 1, #(d)) )
+    FI
+
+-- I think this is clearer with two inline ++ calls but I wanted to try out the +%+ function.
+DEF initials(first,last) == +%+(".")(slice(first, 0, 0), slice(last, 0, 0)) ++ "."

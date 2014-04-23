@@ -1,0 +1,18 @@
+IMPLEMENTATION Aufgabe05
+
+IMPORT Nat COMPLETELY
+
+-- function overloading to avoid confusion
+FUN product : nat ** nat -> nat
+
+DEF product(n) == product(n,1)
+
+
+DEF product(n,acc) ==
+        IF n = 0 THEN acc
+        ELSE
+            product(n - 1, n * acc )
+        FI
+
+    
+--DEF digitSum()

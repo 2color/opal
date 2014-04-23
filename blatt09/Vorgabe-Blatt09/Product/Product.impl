@@ -1,0 +1,11 @@
+IMPLEMENTATION Product
+
+IMPORT Com         COMPLETELY
+       ComCompose  COMPLETELY
+       ProcessArgs COMPLETELY
+       Denotation  COMPLETELY
+       BasicIO     COMPLETELY
+       Nat         COMPLETELY
+       NatConv     ONLY `
+       Seq         ONLY ft rt
+

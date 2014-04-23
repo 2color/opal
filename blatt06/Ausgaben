@@ -1,0 +1,17 @@
+applyToChunk(lalala, upper,1,3) 
+  returns lALAla
+half^2(16) 
+  returns 4
+specCombine(pred,1)(pred,1)(10) 
+ returns 8
+specCombine(pred,5)(pred,1)(10) 
+ returns 14
+
+RUNTIME ERROR: succ'Nat: applied to max
+WARNING [evaluator]: SIGNALLED(SIGABRT)
+connection lost
+
+RUNTIME ERROR: pred'Nat: applied to zero
+WARNING [evaluator]: SIGNALLED(SIGABRT)
+connection lost
+

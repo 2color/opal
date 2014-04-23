@@ -1,0 +1,5 @@
+IMPLEMENTATION ModuleA
+
+IMPORT Denotation COMPLETELY
+
+DEF a == ">>>>>Function defined in ModuleA<<<<<"

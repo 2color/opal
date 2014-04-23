@@ -1,0 +1,74 @@
+IMPLEMENTATION BinSearchTree[alpha, <]
+IMPORT Bool           COMPLETELY
+IMPORT BinTree[alpha] COMPLETELY
+IMPORT Option[alpha]  COMPLETELY
+
+
+-- inserts an element into the tree
+FUN find : alpha ** binTree[alpha] -> option[alpha]
+DEF find(d, nil) == nil
+DEF find(d, node(current, left, right)) == 
+  IF d < current THEN find(d, left)
+  IF d > current THEN find(d, right)
+  IF d = current THEN avail(current)
+  FI
+
+
+-- finds an element , if it was found it will be returned
+FUN insert : alpha ** binTree[alpha] -> binTree[alpha]
+DEF insert(d, nil) == node(d, nil, nil)
+DEF insert(d, node(current, left, right)) ==
+    IF d < current THEN node(current, insert(d, left), right)
+    IF d > current THEN node(current, left, insert(d, right))
+    IF d = current THEN node(current, left, right)
+    FI
+
+
+-- when removing ( e.g. 32) leafs without children 
+-- and two navigation nodes are in a row, 
+-- one can be removed ( usually the smaller one? )
+
+-- when removing ( e.g. 10) navigation nodes with two children
+-- take the biggest element of the left leaf 
+-- ( go left as far as possible and pick the one on the right )
+-- 9
+-- and swap it with the node to be removed
+
+-- finds an element , if it was found it will be returned
+FUN delete : alpha ** binTree[alpha] -> binTree[alpha]
+DEF delete(d, nil) == nil
+DEF delete(d, node(current, left, right)) == 
+  IF nil?(find(d, tree)) THEN tree
+  ELSE
+    IF d = current THEN 
+      IF nil?(left) and nil?(right) THEN nil
+      IF node?(left) and nil?(right) THEN left
+      IF nil?(left) and node?(right) THEN right
+      IF node?(left) and node?(right) THEN node(cont(biggestLeft), delete(cont(biggestLeft), left), right )
+      FI
+    ELSE
+      IF d > current THEN node(current, left, delete(d, right))
+      IF d < current THEN node(current, delete(d, left), right)
+      FI
+    FI
+  FI
+  WHERE
+    tree        == node(current, left, right)
+    biggestLeft == findBiggest(left)
+
+
+FUN findBiggest: binTree[alpha] -> option[alpha]
+DEF findBiggest(nil) == nil
+DEF findBiggest(node(d,l,r)) ==
+	    IF (nil?(r)) THEN avail(d)
+	    ELSE findBiggest(r)
+	    FI
+	    
+
+-- operations for dataorder
+FUN > : alpha**alpha -> bool
+DEF d1 > d2 == d2 < d1
+
+
+FUN = : alpha**alpha -> bool
+DEF  d1 = d2 == not(d1 > d2) and not(d2 > d1) 

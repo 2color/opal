@@ -1,0 +1,21 @@
+IMPLEMENTATION EinAusgabe
+
+-- fuer die Nutzung von Kommandos
+IMPORT Com COMPLETELY
+IMPORT ComCompose COMPLETELY
+-- fuer ask und writeLine (auf Konsole)
+IMPORT BasicIO COMPLETELY
+IMPORT Nat COMPLETELY
+IMPORT NatConv ONLY `
+IMPORT Seq COMPLETELY
+IMPORT SeqReduce COMPLETELY
+IMPORT Denotation COMPLETELY
+-- fuer das Arbeiten mit Dateien
+IMPORT File COMPLETELY
+-- fuer die Hausaufgabe 
+-- (je nach Implementierung nicht unbedingt notwendig
+-- aber vielleicht hilfreich)
+IMPORT Void ONLY nil void
+IMPORT String COMPLETELY
+IMPORT StringConv ONLY !
+

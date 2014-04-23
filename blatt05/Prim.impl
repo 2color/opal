@@ -1,0 +1,18 @@
+IMPLEMENTATION Prim
+
+IMPORT Nat COMPLETELY
+
+FUN prime? : nat ** nat -> bool
+
+
+DEF prim(n) == prime?(n, n-1)
+
+            
+
+DEF prime?(n, div) ==
+    IF div = 0 or div = 1 THEN true
+    ELSE
+        IF mod(n, div) |= 0 THEN FALSE
+        ELSE prime?(n, div - 1)
+        FI
+    FI

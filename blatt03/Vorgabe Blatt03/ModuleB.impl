@@ -1,0 +1,5 @@
+IMPLEMENTATION ModuleB
+
+IMPORT ModuleA COMPLETELY
+
+DEF b == a
