@@ -8,3 +8,7 @@ OCS
 .DS_Store
 
 sublime-opal/
+
+*.tar.gz
+*.zip
+
